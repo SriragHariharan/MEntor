@@ -1,12 +1,13 @@
 import Navbar from "./components/mentee/Navbar";
 import LandingPage from "./pages/LandingPage"
+import Mentors from "./pages/Mentors";
 import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
-		<div className="dark">
+		<div className="dar">
 			<Navbar />
-			<div class="md:pt-16 sm:ml-64">
-           		<ProfilePage /> 
+			<div class="pt-16 sm:ml-64">
+           		<Mentors />
 			</div>
 		</div>
   );
