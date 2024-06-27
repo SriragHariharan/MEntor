@@ -1,13 +1,12 @@
 import MentorNavbar from "./components/mentor/MentorNavbar";
-import Mentees from "./pages/Mentees";
-import Mentors from "./pages/Mentors";
+import AddSlotsPage from "./pages/AddSlotsPage";
 
 function App() {
   return (
-		<div className="dak">
+		<div className="dark">
 			<MentorNavbar />
 			<div class="pt-16 sm:ml-64">
-           		<Mentees />
+           		<AddSlotsPage />
 			</div>
 		</div>
   );

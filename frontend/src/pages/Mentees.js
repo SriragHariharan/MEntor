@@ -174,7 +174,7 @@ function Mentees() {
 								</div>
 							</td>
 							<td class="px-6 py-4 flex gap-6">
-								<div className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+								<div className="font-medium text-red-600 hover:underline">
 									Block
 								</div>
 								<div className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
@@ -205,7 +205,7 @@ function Mentees() {
 								</div>
 							</td>
 							<td class="px-6 py-4 flex gap-6">
-								<div className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+								<div className="font-medium text-green-600 -500 hover:underline">
 									Unblock
 								</div>
 								<div className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
