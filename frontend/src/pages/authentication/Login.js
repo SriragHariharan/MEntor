@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import auth_banner from "../../assets/images/auth page/auth banner.jpg";
 import google_logo from "../../assets/images/auth page/search.png";
 import logo from "../../assets/images/landingpage/mentor logo.jpg";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import { useForm } from "react-hook-form";
+import {validateGoogleUser} from '../../helpers/validateGoogleUser';
 
 function Login() {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const onSubmit = (data) => console.log(data);
+
+    //google login logic
+    const handleGoogleLogin = useGoogleLogin({
+		onSuccess: (resp) => { validateGoogleUser(resp?.access_token).then(resp => console.log(resp)).catch(err => console.log(err))},
+		onError: (error) => console.log("Login Failed:", error),
+	});
+
   return (
     <div class="h-screen grid grid-cols-1 lg:grid-cols-2 items-center">
         <div class="flex-1 p-8 md:p-12">
@@ -38,7 +47,7 @@ function Login() {
                     </div>
                     <button type='submit' class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">Sign in</button>
                 </form>
-                <button class="my-8 bg-white border-2 hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded inline-flex justify-center items-center w-full">
+                <button onClick={handleGoogleLogin} class="my-8 bg-white border-2 hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded inline-flex justify-center items-center w-full">
                     <img src={google_logo} alt="Google Logo" class="h-4 w-4 mr-2" />
                     Continue with Google
                 </button>

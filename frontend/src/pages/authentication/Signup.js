@@ -4,6 +4,8 @@ import google_logo from "../../assets/images/auth page/search.png";
 import logo from "../../assets/images/landingpage/mentor logo.jpg";
 
 import { useForm } from "react-hook-form";
+import { validateGoogleUser } from "../../helpers/validateGoogleUser";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Signup() {
 	const {
@@ -12,6 +14,16 @@ function Signup() {
 		handleSubmit,
 	} = useForm();
 	const onSubmit = (data) => console.log(data);
+
+	//google login logic
+	const handleGoogleLogin = useGoogleLogin({
+		onSuccess: (resp) => {
+			validateGoogleUser(resp?.access_token)
+				.then((resp) => console.log(resp))
+				.catch((err) => console.log(err));
+		},
+		onError: (error) => console.log("Login Failed:", error),
+	});
 	return (
 		<div class="h-screen grid grid-cols-1 lg:grid-cols-2 items-center">
 			<div class="flex-1 p-8 md:p-12">
@@ -49,10 +61,7 @@ function Signup() {
 								</small>
 							)}
 							{errors.username?.type === "maxLength" && (
-								<p
-									className=""
-									style={{ color: "red" }}
-								>
+								<p className="" style={{ color: "red" }}>
 									Username too long
 								</p>
 							)}
@@ -71,7 +80,9 @@ function Signup() {
 								class="w-full pl-4 text-sm text-gray-700"
 							/>
 							{errors.email?.type === "required" && (
-								<small style={{ color: "red" }}>email required</small>
+								<small style={{ color: "red" }}>
+									email required
+								</small>
 							)}
 							{errors.email?.type === "pattern" && (
 								<small style={{ color: "red" }}>
@@ -108,7 +119,9 @@ function Signup() {
 								{/* <input type="checkbox" id="remember" class="mr-2" />
                         <label class="text-gray-700" for="remember">Remember me</label> */}
 							</small>
-							<small class="text-blue-500">Forgot password?</small>
+							<small class="text-blue-500">
+								Forgot password?
+							</small>
 						</div>
 						<button
 							type="submit"
@@ -117,7 +130,7 @@ function Signup() {
 							Sign in
 						</button>
 					</form>
-					<button class="my-8 bg-white border-2 hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded inline-flex justify-center items-center w-full">
+					<button onClick={handleGoogleLogin} class="my-8 bg-white border-2 hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded inline-flex justify-center items-center w-full">
 						<img
 							src={google_logo}
 							alt="Google Logo"

@@ -1,16 +1,22 @@
+import {GoogleOAuthProvider} from '@react-oauth/google';
+
 import MentorNavbar from "./components/mentor/MentorNavbar";
-import AddSlotsPage from "./pages/AddSlotsPage";
-import InterviewsPage from "./pages/InterviewsPage";
 import Mentees from "./pages/Mentees";
+import Login from './pages/authentication/Login';
+import Signup from './pages/authentication/Signup';
 
 function App() {
   return (
-		<div className="dar">
-			<MentorNavbar />
-			<div class="pt-16 sm:ml-64">
-           		<Mentees />
-			</div>
-		</div>
+		<GoogleOAuthProvider clientId={process.env.REACT_APP_OAUTH_CLIENT_ID}>
+			{/* <div className="dar">
+				<MentorNavbar />
+				<div class="pt-16 sm:ml-64">
+					<Mentees />
+				</div>
+			</div> */}
+			<Login />
+			<Signup />
+		</GoogleOAuthProvider>
   );
 }
 
