@@ -16,8 +16,13 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 
 import { MdDarkMode } from "react-icons/md";
 import { IoMdSunny } from "react-icons/io";
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTheme } from '../../redux toolkit/themeSlice';
 
 function Navbar() {
+	const dispatch = useDispatch();
+	const isDarkTheme = useSelector((store) => store?.isDark?.isThemeDark);
 
   return (
 		<div className="">
@@ -46,13 +51,18 @@ function Navbar() {
 						<div className="flex items-center">
 							<div className="flex items-center ms-3">
 								<div className="flex items-center gap-4">
-									<MdDarkMode className="cursor-pointer w-8 h-8 text-gray-500" />
-									<IoMdSunny className="cursor-pointer w-8 h-8 text-yellow-300" />
-                                    <img
-                                        className="w-10 h-10 rounded-full cursor-pointer"
-                                        src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                                        alt="user photo"
-                                    />							
+									{/* dark light toggle */}
+									{isDarkTheme ? (
+										<IoMdSunny onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-8 h-8 text-yellow-300" />
+									) : (
+										<MdDarkMode  onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-8 h-8 text-gray-500" />
+									)}
+
+									<img
+										className="w-10 h-10 rounded-full cursor-pointer"
+										src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										alt="user photo"
+									/>
 								</div>
 							</div>
 						</div>
@@ -75,10 +85,13 @@ function Navbar() {
 							<BsFilePost className="text-2xl" />
 							<span className="ms-3">Feed</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link
+							to="/mentee/mentors"
+							className="flex items-center p-2 text-green-500"
+						>
 							<FaPeopleGroup className="text-2xl" />
 							<span className="ms-3">Mentors</span>
-						</div>
+						</Link>
 						<div className="flex items-center p-2 text-green-500">
 							<FaLaptopCode className="text-2xl" />
 							<span className="ms-3">Webinars</span>
@@ -94,21 +107,30 @@ function Navbar() {
 							<GiPublicSpeaker className="text-2xl" />
 							<span className="ms-3">Rooms</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link
+							to="/mentee/profile"
+							className="flex items-center p-2 text-green-500"
+						>
 							<FaGear className="text-2xl" />
 							<span className="ms-3">Profile</span>
-						</div>
-						<div className="flex items-center p-2 text-green-500">
+						</Link>
+						<Link
+							to="/mentee/interviews"
+							className="flex items-center p-2 text-green-500"
+						>
 							<MdWork className="text-2xl" />
 							<span className="ms-3">Interviews</span>
-						</div>
-						<div className="flex items-center p-2 text-green-500">
+						</Link>
+						<Link
+							to="/mentee/notifications"
+							className="flex items-center p-2 text-green-500"
+						>
 							<AiOutlineBell className="text-2xl" />
 							<span className="ms-3">Notifications</span>
 							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
 								3
 							</span>
-						</div>
+						</Link>
 					</div>
 					<div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
 						<div className="flex items-center p-2 text-gray-500">
