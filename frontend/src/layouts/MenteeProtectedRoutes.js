@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import Navbar from '../components/mentee/Navbar';
 
 function MenteeProtectedRoutes() {
-    let mentee = true;
+    let mentee = null;
     return mentee ? 
         <>
             <Navbar />

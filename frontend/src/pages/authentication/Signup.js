@@ -6,6 +6,8 @@ import logo from "../../assets/images/landingpage/mentor logo.jpg";
 import { useForm } from "react-hook-form";
 import { validateGoogleUser } from "../../helpers/validateGoogleUser";
 import { useGoogleLogin } from "@react-oauth/google";
+import { googleSignupUser, signupUser } from "../../helpers/validateUser";
+import { Link } from "react-router-dom";
 
 function Signup() {
 	const {
@@ -13,17 +15,36 @@ function Signup() {
 		formState: { errors },
 		handleSubmit,
 	} = useForm();
-	const onSubmit = (data) => console.log(data);
-
+	
 	//google login logic
 	const handleGoogleLogin = useGoogleLogin({
 		onSuccess: (resp) => {
 			validateGoogleUser(resp?.access_token)
-				.then((resp) => console.log(resp))
-				.catch((err) => console.log(err));
+				.then((resp) => {
+					// console.log("user :", resp.id)
+					return googleSignupUser({
+						username: resp.name,
+						password: resp?.id,
+						...resp,
+					});
+				})
+				.then((resp) => console.log("google resp ::", resp))
+
+				.catch((err) => console.log(err?.response?.data?.message));
 		},
 		onError: (error) => console.log("Login Failed:", error),
 	});
+	
+	//get role from routes
+	const urlParams = new URLSearchParams(window.location.search);
+	const role = urlParams.get("role");
+	console.log("role:::", role)
+	//submit form
+	const onSubmit = (data) => {
+		signupUser({ ...data, role })
+			.then((resp) => console.log("resp:", resp))
+			.catch((err) => console.log("err:", err));
+	} 
 	return (
 		<div class="h-screen grid grid-cols-1 lg:grid-cols-2 items-center">
 			<div class="flex-1 p-8 md:p-12">
@@ -114,11 +135,11 @@ function Signup() {
 							)}
 						</div>
 						<div class="flex justify-between mb-4">
-							<small className="text-blue-600 font-semibold">
+							<Link to={"/mentee/login"} className="small text-blue-600 font-semibold">
 								Existing user? Login now
 								{/* <input type="checkbox" id="remember" class="mr-2" />
                         <label class="text-gray-700" for="remember">Remember me</label> */}
-							</small>
+							</Link>
 							<small class="text-blue-500">
 								Forgot password?
 							</small>

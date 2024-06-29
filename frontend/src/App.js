@@ -1,7 +1,5 @@
 import {GoogleOAuthProvider} from '@react-oauth/google';
-
-import MentorNavbar from "./components/mentor/MentorNavbar";
-import Notifications from './pages/Notifications';
+import { ToastContainer } from "react-toastify";
 import useRoutes from './helpers/useRoutes';
 import { RouterProvider } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -11,6 +9,7 @@ function App() {
 	const isDarkTheme = useSelector((store) => store?.isDark?.isThemeDark);
   return (
 		<GoogleOAuthProvider clientId={process.env.REACT_APP_OAUTH_CLIENT_ID}>
+			<ToastContainer />
 			<div className={isDarkTheme && "dark"}>
 				<RouterProvider router={router} />
 				{/* <MentorNavbar />
