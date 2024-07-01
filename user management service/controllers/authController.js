@@ -1,7 +1,7 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { produceKafkaMessage } = require("../helpers/kafkaProducer");
+const { produceKafkaMessage, publishLoginOTP } = require("../helpers/kafkaProducer");
 const { generateOTP } = require("../helpers/otpGenerator");
 const redis=require('../helpers/redis')
 
@@ -29,11 +29,10 @@ const signupUserController =  async (req, res, next) => {
         console.log("otp generated :", otp);
         //store otp in REDIS DB
         redis.set(email, otp);
-        redis.expire(email, 60);
+        redis.expire(email, process.env.OTP_VALIDATION_TIME);
         redis.set(`det_${email}`, JSON.stringify({username, email, role, userID:_id}));
-        
         //send otp to the email service below
-
+		publishLoginOTP(email, otp)
 		//returning a reponse
 		return res
 			.status(201)
@@ -215,10 +214,10 @@ const resendOtpController = async (req, res, next) => {
         const otp = generateOTP(6);
         console.log("otp re-generated :", otp);
         //send otp to user via nodemailer here
-
+		publishLoginOTP(req.body.email, otp)
         //store otp in REDIS DB
         redis.set(req.body.email, otp);
-        redis.expire(email, 60);
+        redis.expire(email, process.env.OTP_VALIDATION_TIME);
         return res.status(200).json({success:true, message:"OTP sent to registered email"})
     } catch (error) {
         //next(error.message);
@@ -236,7 +235,7 @@ const verifyEmailController = async (req, res, next) => {
 		const otp = generateOTP(6);
         console.log("otp generated :", otp);
         //send otp to user via nodemailer here
-
+		publishLoginOTP(userDetails?.email, otp);
         //store otp in REDIS DB
         redis.set(userDetails?.email, otp);
         redis.expire(userDetails?.email, 60);

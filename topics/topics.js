@@ -14,7 +14,7 @@ const createTopic = async () => {
 		await admin.createTopics({
 			topics: [
 				{
-					topic: "authentication-otp-topic", // The topic name
+					topic: "auth-otp-topic", // The topic name
 					numPartitions: 1, // The number of partitions
 					replicationFactor: 1, // The replication factor
 				}

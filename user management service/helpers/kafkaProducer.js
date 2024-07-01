@@ -18,9 +18,9 @@ const publishMessage = async(topic, message) => {
 
 
 //produce otp on login and signup
-const produceLoginOTP = (otp) => {
+const publishLoginOTP = (email, otp) => {
     console.log("producer otp :::",otp)
-    publishMessage("authentication-otp-topic", otp);
+    publishMessage("auth-otp-topic", JSON.stringify({email, otp}));
 }
 
-module.exports = {produceLoginOTP}
+module.exports = {publishLoginOTP}
