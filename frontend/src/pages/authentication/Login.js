@@ -5,7 +5,11 @@ import { useGoogleLogin } from "@react-oauth/google";
 
 import { useForm } from "react-hook-form";
 import {validateGoogleUser} from '../../helpers/validateGoogleUser';
-import { googleSignupUser, loginUser } from "../../helpers/validateUser";
+import { googleSignupUser, loginUser } from "../../helpers/authHelpers";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUserAction } from "../../redux toolkit/userSlice";
+import { showErrorToast } from "../../helpers/ToastMessageHelpers";
 
 function Login() {
 	const {
@@ -13,14 +17,19 @@ function Login() {
 		formState: { errors },
 		handleSubmit,
 	} = useForm();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
     
 	const onSubmit = (data) => {
 		loginUser(data)
-			.then((resp) => console.log("resp:", resp.message))
-			.catch((err) => console.log("err:", err?.response?.data?.message));
+			.then(resp => {
+				dispatch(loginUserAction(resp.data))
+				navigate("/mentee/profile")	
+			})
+			.catch((err) => showErrorToast(err))
 	};
 
-	//google login logic
+//google login logic
 	const handleGoogleLogin = useGoogleLogin({
 		onSuccess: (resp) => {
 			validateGoogleUser(resp?.access_token)
@@ -32,10 +41,22 @@ function Login() {
 						...resp,
 					});
 				})
-				.then((resp) => console.log("google resp ::", resp.message))
-				.catch((err) => console.log(err?.response?.data?.message));
+				.then((resp) => {
+					console.log("google resp ::", resp.success, resp.data);
+					if(!resp.success){
+						console.log("user not exists");
+						localStorage.setItem("MEntor_temp_token",resp.data.tempToken );
+						navigate("/mentee/select-role")
+					}else{
+						dispatch(loginUserAction(resp.data))
+						navigate("/mentee/profile")
+						console.log("redirect to profile page")
+					}
+				})
+
+				.catch((err) => showErrorToast(err));
 		},
-		onError: (error) => console.log("Login Failed:", error),
+		onError: (error) => showErrorToast(error?.message),
 	});
 
 	return (
@@ -98,12 +119,12 @@ function Login() {
 							)}
 						</div>
 						<div class="flex justify-between mb-4">
-							<div className="text-blue-600 font-semibold">
+							<Link to={"/mentee/signup"} className="text-blue-600 font-semibold">
 								New user? register now
 								{/* <input type="checkbox" id="remember" class="mr-2" />
                         <label class="text-gray-700" for="remember">Remember me</label> */}
-							</div>
-							<div class="text-blue-500">Forgot password?</div>
+							</Link>
+							<Link to={"/mentee/verify-email"} class="text-blue-500">Forgot password?</Link>
 						</div>
 						<button
 							type="submit"

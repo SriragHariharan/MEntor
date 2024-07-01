@@ -7,7 +7,7 @@ function ForgotPassword() {
     const onSubmit = (data) => console.log(data);
 
   return (
-    <div class="h-screen flex items-center justify-center">
+    <div class="h-screen flex items-center justify-center bg-teal-50">
         <div class="max-w-xl w-full m-auto p-6 my-12">
             <h2 class="text-3xl md:text-5xl font-semibold my-2">Forgot your password?</h2>
             <p class="text-xl md:text-2xl text-gray-800 dark:text-gray-400 mb-8">You'll get an email with otp</p>

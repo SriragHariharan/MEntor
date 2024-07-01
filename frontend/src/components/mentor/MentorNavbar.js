@@ -19,8 +19,15 @@ import { TbPigMoney } from "react-icons/tb";
 
 import { MdDarkMode } from "react-icons/md";
 import { IoMdSunny } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { logoutUserAction } from "../../redux toolkit/userSlice";
 
 function MentorNavbar() {
+	const dispatch = useDispatch();
+	const logoutMentor = () => {
+		dispatch(logoutUserAction())
+	}
+
 	return (
 		<div className="">
 			<nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -129,7 +136,7 @@ function MentorNavbar() {
 							<IoIosHelpCircleOutline className="text-2xl" />
 							<span className="ms-3">Help</span>
 						</div>
-						<div className="flex items-center p-2 text-red-500">
+						<div onClick={logoutMentor} className="flex items-center p-2 text-red-500">
 							<AiOutlineLogout className="text-2xl" />
 							<span className="ms-3">Logout</span>
 						</div>

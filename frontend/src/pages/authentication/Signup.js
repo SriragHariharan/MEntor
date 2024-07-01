@@ -6,8 +6,11 @@ import logo from "../../assets/images/landingpage/mentor logo.jpg";
 import { useForm } from "react-hook-form";
 import { validateGoogleUser } from "../../helpers/validateGoogleUser";
 import { useGoogleLogin } from "@react-oauth/google";
-import { googleSignupUser, signupUser } from "../../helpers/validateUser";
-import { Link } from "react-router-dom";
+import { googleSignupUser, signupUser } from "../../helpers/authHelpers";
+import { Link, useNavigate } from "react-router-dom";
+import { showErrorToast } from "../../helpers/ToastMessageHelpers";
+import { useDispatch } from "react-redux";
+import { loginUserAction } from "../../redux toolkit/userSlice";
 
 function Signup() {
 	const {
@@ -15,6 +18,9 @@ function Signup() {
 		formState: { errors },
 		handleSubmit,
 	} = useForm();
+
+	const navigate = useNavigate();
+	const dispatch = useDispatch()
 	
 	//google login logic
 	const handleGoogleLogin = useGoogleLogin({
@@ -28,22 +34,33 @@ function Signup() {
 						...resp,
 					});
 				})
-				.then((resp) => console.log("google resp ::", resp))
+				.then((resp) => {
+					console.log("google resp ::", resp.success, resp.data);
+					if(!resp.success){
+						console.log("user not exists");
+						localStorage.setItem("MEntor_temp_token",resp.data.tempToken );
+						navigate("/mentee/select-role")
+					}else{
+						dispatch(loginUserAction(resp.data));
+						navigate(resp.data.role + "/profile")
+					}
+				})
 
-				.catch((err) => console.log(err?.response?.data?.message));
+				.catch((err) => showErrorToast(err));
 		},
-		onError: (error) => console.log("Login Failed:", error),
+		onError: (error) => showErrorToast(error?.message),
 	});
 	
-	//get role from routes
-	const urlParams = new URLSearchParams(window.location.search);
-	const role = urlParams.get("role");
-	console.log("role:::", role)
+
 	//submit form
 	const onSubmit = (data) => {
-		signupUser({ ...data, role })
-			.then((resp) => console.log("resp:", resp))
-			.catch((err) => console.log("err:", err));
+		signupUser(data)
+			.then((resp) => {
+				console.log("resp:", resp);
+				localStorage.setItem("mentor_otp_verification_email", resp?.data?.email);
+				navigate("/mentee/verifyOTP")
+			})
+			.catch((err) => showErrorToast(err));
 	} 
 	return (
 		<div class="h-screen grid grid-cols-1 lg:grid-cols-2 items-center">
@@ -112,6 +129,26 @@ function Signup() {
 							)}
 						</div>
 						<div class="mb-4">
+							<label class="block text-gray-700">
+								Select Role
+							</label>
+							<select
+								{...register("role", {
+									required: true,
+								})}
+								class="w-full pl-4 text-sm text-gray-700"
+							>
+								<option value="">Select Role</option>
+								<option value="mentor">Mentor</option>
+								<option value="mentee">Mentee</option>
+							</select>
+							{errors.role?.type === "required" && (
+								<small style={{ color: "red" }}>
+									Role is required
+								</small>
+							)}
+						</div>
+						<div class="mb-4">
 							<label class="block text-gray-700" for="password">
 								Password
 							</label>
@@ -140,9 +177,9 @@ function Signup() {
 								{/* <input type="checkbox" id="remember" class="mr-2" />
                         <label class="text-gray-700" for="remember">Remember me</label> */}
 							</Link>
-							<small class="text-blue-500">
+							<Link to={"/mentee/verify-email"} class="text-blue-500">
 								Forgot password?
-							</small>
+							</Link>
 						</div>
 						<button
 							type="submit"

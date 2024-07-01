@@ -1,12 +1,15 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom';
 import Navbar from '../components/mentee/Navbar';
+import MentorNavbar from '../components/mentor/MentorNavbar';
 
-function MenteeProtectedRoutes() {
-    let mentee = null;
-    return mentee ? 
+function MenteeProtectedRoutes({user, role}) {
+    return user ? 
         <>
-            <Navbar />
+        {
+            (role==="mentor") ? <MentorNavbar /> : <Navbar />
+        }
+            
             <div class="pt-16 sm:ml-64">
                 <Outlet />
             </div>

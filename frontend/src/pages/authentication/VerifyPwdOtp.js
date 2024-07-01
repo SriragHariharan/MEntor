@@ -1,35 +1,37 @@
-import React, {useEffect, useState} from 'react';
+//page for users to type otp for forgot password
+
+import React, {useState, useEffect} from 'react';
 import logo from "../../assets/images/landingpage/mentor logo.jpg";
 import { useForm } from "react-hook-form";
-import { resendSignupOtp, verifyOTP } from '../../helpers/authHelpers';
+import { resendSignupOtp, verifyResetPasswordOTP } from '../../helpers/authHelpers';
 import { showErrorToast } from '../../helpers/ToastMessageHelpers';
-import {useDispatch} from 'react-redux'
-import { loginUserAction } from '../../redux toolkit/userSlice';
 import { useNavigate } from 'react-router-dom';
 
-function VerifyOtp() {
+function VerifyPwdOtp() {
     const {
 		register,
 		formState: { errors },
 		handleSubmit,
 	} = useForm();
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
+
+	const navigate = useNavigate()	
 	
 	//submitting otp to verify in the server
 	const onSubmit = (data) => {
-		verifyOTP(data?.otp)
+		verifyResetPasswordOTP(data?.otp)
 		.then(resp => {
-			//show success toast
-			dispatch(loginUserAction(resp.data))
-			navigate("/mentee/profile")
+			//store a temporary token in localhost for security
+			localStorage.clear();
+			localStorage.setItem('MEntor_temp_token', resp.data.tempToken)
+			console.log(resp.data)
+			navigate("/mentee/reset-password")
 		})
 		.catch(err => showErrorToast(err))
 	}
 
 	//counter functionality
-	const [timer, setTimer] = useState(localStorage.getItem('MEntor_signup_timer') || process.env.REACT_APP_OTP_TIME); //in seconds
-	useEffect(() => localStorage.setItem('MEntor_signup_timer', timer), [timer]);
+	const [timer, setTimer] = useState(localStorage.getItem('MEntor_forgot_password_timer') || process.env.REACT_APP_OTP_TIME); //in seconds
+	useEffect(() => localStorage.setItem('MEntor_forgot_password_timer', timer), [timer]);
 	useEffect(() => {
 		if (timer > 0) {
 		const intervalId = setInterval(() => {
@@ -45,7 +47,7 @@ function VerifyOtp() {
 		return `${minutes}:${secondsRemaining.toString().padStart(2, '0')}`;
   	};
 
-	//resend otp on timer expiration
+  	//resend otp on timer expiration
 	const handleResendOtp = () => {
 		resendSignupOtp()
 
@@ -88,15 +90,11 @@ function VerifyOtp() {
 							</p>
 						)}
 						<span className="text-xl">Resend OTP in: {formatTime(timer)}</span>
-						{
-							timer > 0 && <button type="submit" className='bg-green-500 p-2 text-white w-full mt-6 rounded-md'>Verify OTP</button>
-						}
+                        {timer > 0 && <button type="submit" className='bg-green-500 p-2 text-white w-full mt-6 rounded-md'>Verify OTP</button> }
 					</form>
-					<>
 					{
 						 (timer <= 0 ) && <div onClick={handleResendOtp} className='bg-green-500 p-2 text-white w-full mt-6 rounded-md text-center cursor-pointer'>Resend OTP</div>
 					}
-					</>
 				</div>
 			</div>
 			<div className="flex justify-center">
@@ -106,4 +104,4 @@ function VerifyOtp() {
 	);
 }
 
-export default VerifyOtp;
+export default VerifyPwdOtp;

@@ -17,7 +17,9 @@ const userSchema = new mongoose.Schema(
 		},
 		role: {
 			type: String,
+			required: true,
 			enum: ["admin", "mentor", "mentee"],
+			default: "mentee",
 		},
 		accountBlocked: {
 			type: Boolean,

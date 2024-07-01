@@ -19,10 +19,14 @@ import { IoMdSunny } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../../redux toolkit/themeSlice';
+import { logoutUserAction } from '../../redux toolkit/userSlice';
 
 function Navbar() {
 	const dispatch = useDispatch();
 	const isDarkTheme = useSelector((store) => store?.isDark?.isThemeDark);
+	const logoutMentee = () => {
+		dispatch(logoutUserAction())
+	}
 
   return (
 		<div className="">
@@ -137,7 +141,7 @@ function Navbar() {
 							<IoIosHelpCircleOutline className="text-2xl" />
 							<span className="ms-3">Help</span>
 						</div>
-						<div className="flex items-center p-2 text-red-500">
+						<div onClick={logoutMentee} className="flex items-center p-2 text-red-500">
 							<AiOutlineLogout className="text-2xl" />
 							<span className="ms-3">Logout</span>
 						</div>

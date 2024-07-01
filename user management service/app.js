@@ -3,6 +3,7 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require('./helpers/redis')
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use((err, req, res, next) => {
     if(err.status){
         return res.status(err.status).json({message: err.message});
     }
-	return res.status(500).json({ message: "Internal Server Error" });
+	return res.status(500).json({ message: err ?? "Internal Server Error" });
 });
 
 mongoose.connect(process.env.DATABASE_URL);
