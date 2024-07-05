@@ -1,8 +1,21 @@
 import React from 'react'
+import { useForm } from 'react-hook-form';
 import { FaGraduationCap } from 'react-icons/fa6';
 import { GiBrain } from "react-icons/gi";
+import { axiosInstance } from '../../helpers/axios';
+import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
 
-function ExperienceCard() {
+function ExperienceCard({experience, editAccess}) {
+
+	console.log(experience.length);
+	const { register, formState: { errors }, handleSubmit } = useForm(); //a part of react-hook-form
+    const onSubmit = (data) => {
+		console.log(data);
+		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/experience", data)
+		.then(resp => showSuccessToast(resp.data.message))
+		.catch(error => showErrorToast(error.message))
+	} 
+
   return (
 		<div class="flex flex-wrap">
 			<div class="w-full">
@@ -11,52 +24,47 @@ function ExperienceCard() {
 						<h2 class="text-lg font-bold dark:text-gray-400">
 							Experience
 						</h2>
-						<button
-							data-modal-target="experience-modal"
-							data-modal-toggle="experience-modal"
-							class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-						>
-							Add Experience
-						</button>
+						{
+							editAccess && (
+							<button
+								data-modal-target="experience-modal"
+								data-modal-toggle="experience-modal"
+								class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+							>
+								Add Experience
+							</button>
+							)
+						}
 					</div>
 					<ul class="list-none mb-4">
-						<li class="py-4 border-b border-gray-200">
-							<div class="flex items-center">
-								<div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-									<span class="font-medium text-gray-600 dark:text-gray-300">
-										<GiBrain className="text-xl" />
-									</span>
-								</div>
-								<div>
-									<h3 class="text-sm font-bold dark:text-gray-500">
-										Software Engineer at ABC Company
-									</h3>
-									<p class="text-sm text-gray-600">
-										Jan 2020 - Present
-									</p>
-								</div>
-							</div>
-						</li>
-						<li class="py-4 border-b border-gray-200">
-							<div class="flex items-center">
-								<img
-									src="https://via.placeholder.com/40"
-									alt="Company Logo"
-									class="w-10 h-10 rounded-full mr-4"
-								/>
-								<div>
-									<h3 class="text-sm font-bold dark:text-gray-500">
-										Intern at DEF Company
-									</h3>
-									<p class="text-sm text-gray-600">
-										Jun 2019 - Aug 2019
-									</p>
-								</div>
-							</div>
-						</li>
+						{
+							(experience.length > 0) ? (
+								experience.reverse().map(exp => 
+									<li class="py-4 border-b border-gray-200">
+										<div class="flex items-center">
+											<div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+												<span class="font-medium text-gray-600 dark:text-gray-300">
+													<GiBrain className="text-xl" />
+												</span>
+											</div>
+											<div>
+												<h3 class="text-sm font-bold dark:text-gray-500">
+													{exp?.role} at {exp?.company}
+												</h3>
+												<p class="text-sm text-gray-600">
+													{exp?.timespan}
+												</p>
+											</div>
+										</div>
+									</li>
+								)
+							):
+							<div className="text-xl text-gray-300">No experience added</div>
+						}
 					</ul>
 				</div>
 			</div>
+
 			{/* add experience modal */}
 			<div
 				id="experience-modal"
@@ -96,42 +104,35 @@ function ExperienceCard() {
 							</button>
 						</div>
 						{/* Modal body */}
-						<form class="p-4 md:p-5">
+						<form onSubmit={handleSubmit(onSubmit)} class="p-4 md:p-5">
 							<div class="grid gap-4 mb-4 grid-cols-2">
 								<div class="col-span-2">
-									<label
-										for="name"
-										class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									>
+									<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 										Role <span className="text-lg">*</span>
 									</label>
 									<input
 										type="text"
 										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 										placeholder="Type your role"
-										required=""
+										{...register("role", { required: true})}
 									/>
+									{errors.role?.type === 'required' && <p style={{color:'red'}}>Require field</p>}
 								</div>
 								<div class="col-span-2">
-									<label
-										for="name"
-										class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									>
-										Company{" "}
+									<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Company
 										<span className="text-lg">*</span>
 									</label>
 									<input
 										type="text"
 										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 										placeholder="Type company name"
-										required=""
+										{...register("company", { required: true})}
 									/>
+									{errors.company?.type === 'required' && <p style={{color:'red'}}>Require field</p>}
 								</div>
 								<div class="col-span-2">
-									<label
-										for="name"
-										class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									>
+									<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 										Timespan{" "}
 										<span className="text-lg">*</span>
 									</label>
@@ -139,8 +140,9 @@ function ExperienceCard() {
 										type="text"
 										class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 										placeholder="Type timespan"
-										required=""
+										{...register("timespan", { required: true})}
 									/>
+									{errors.timespan?.type === 'required' && <p style={{color:'red'}}>Require field</p>}
 								</div>
 							</div>
 							<button

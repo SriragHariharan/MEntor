@@ -22,11 +22,32 @@ import ForgotPassword from '../pages/authentication/ForgotPassword';
 import ResetPassword from '../pages/authentication/ResetPassword';
 import VerifyEmail from '../pages/authentication/VerifyEmail';
 import SelectRole from '../pages/authentication/SelectRole';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import VerifyPwdOtp from "../pages/authentication/VerifyPwdOtp";
-
+import { jwtDecode } from 'jwt-decode';
+import { logoutUserAction } from "../redux toolkit/userSlice";
+import { showErrorToast } from "./ToastMessageHelpers";
 
 function useRoutes() {
+	const dispatch = useDispatch();
+
+	setInterval(() =>{
+		const token = localStorage.getItem('MEntor_token');
+		if (token) {
+			const decodedToken = jwtDecode(token);
+			const expirationTime = decodedToken.exp * 1000; // convert to milliseconds
+	
+			if (expirationTime < Date.now()) {
+				console.log("token expired");
+				showErrorToast("Session expired. Login to continue")
+				dispatch(logoutUserAction())
+			}else{
+				console.log("token not expired");
+			}
+		}
+	}, 3000000000000)
+
+	//validate user and verify token
 	const USER = useSelector(store => store?.user);
 	console.log("AT : ",USER);
 	const router = createBrowserRouter(

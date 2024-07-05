@@ -1,7 +1,7 @@
 const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { produceKafkaMessage, publishLoginOTP } = require("../helpers/kafkaProducer");
+const { publishLoginOTP, publishNewUser } = require("../helpers/kafkaProducer");
 const { generateOTP } = require("../helpers/otpGenerator");
 const redis=require('../helpers/redis')
 
@@ -66,16 +66,10 @@ const loginUserController =  async (req, res, next) => {
 			const accessToken = generateToken(
 				process.env.ACCESS_TOKEN_SECRET,
 				payload,
-				"10s"
-			);
-			const refreshToken = generateToken(
-				process.env.REFRESH_TOKEN_SECRET,
-				payload,
-				"10s"
+				process.env.AX_TOKEN_EXP_TIME
 			);
 			//returning a reponse
 			return res
-				.cookie("refreshToken", refreshToken, {httpOnly: true})
 				.status(201)
 				.json({
 					success: true,
@@ -126,12 +120,9 @@ const signupGoogleUserController =  async (req, res, next) => {
 				userID: existingUser?._id,
 			};
 			const accessToken = generateToken(process.env.ACCESS_TOKEN_SECRET, payload, process.env.AX_TOKEN_EXP_TIME);
-			const refreshToken = generateToken(process.env.REFRESH_TOKEN_SECRET, payload, process.env.RF_TOKEN_EXP_TIME);
-
 			//returning a reponse
 			return res
 				.status(201)
-				.cookie("refreshToken", refreshToken, {httpOnly: true})
 				.json({success: true, message: "Login success", data: { token: accessToken, username:existingUser?.username, email:existingUser?.email, role:existingUser?.role }});
 		}
     } catch (error) {
@@ -151,11 +142,11 @@ const signupGoogleUserWithRoleController = async(req, res, next) => {
 		//generate jwt
 		const payload = { email, role, userID: _id };
 		const accessToken = generateToken(process.env.ACCESS_TOKEN_SECRET, payload, process.env.AX_TOKEN_EXP_TIME);
-		const refreshToken = generateToken(process.env.REFRESH_TOKEN_SECRET, payload, process.env.RF_TOKEN_EXP_TIME);
+		//publishing message to topic for other services to get
+		publishNewUser(_id, username, email, role)
 		//returning a reponse
 		return res
 			.status(201)
-			.cookie("refreshToken", refreshToken, {httpOnly: true,})
 			.json({success: true, message: "Login success", data: { token: accessToken, username, email, role } });
 	} catch (error) {
 		next(error.message);
@@ -176,20 +167,13 @@ const verifyOtpController = async (req, res, next) => {
 		await User.updateOne({email: email}, {$set:{isEmailVerified: true}})
         //signup user by providing username, email and token
         const payload = { username: userDetails?.username, email:userDetails?.email, role:userDetails?.role, userID:userDetails?.userID };
-			const accessToken = generateToken(
-				process.env.ACCESS_TOKEN_SECRET,
-				payload,
-				"10s"
-			);
-			const refreshToken = generateToken(
-				process.env.REFRESH_TOKEN_SECRET,
-				payload,
-				"10s"
-			);
+		//publishing message to topic for other services to get
+		publishNewUser(userDetails?.userID, userDetails?.username, userDetails?.email, userDetails?.role);
+			const accessToken = generateToken(process.env.ACCESS_TOKEN_SECRET,payload,process.env.AX_TOKEN_EXP_TIME);
             //deleting data stored in redis 
+			await redis.del("det_"+email);
 			//returning a reponse
 			return res
-				.cookie("refreshToken", refreshToken, {httpOnly: true})
 				.status(201)
 				.json({success: true,message: "signup success",
 					data: {
@@ -220,7 +204,7 @@ const resendOtpController = async (req, res, next) => {
         redis.expire(email, process.env.OTP_VALIDATION_TIME);
         return res.status(200).json({success:true, message:"OTP sent to registered email"})
     } catch (error) {
-        //next(error.message);
+        next(error.message);
     }
 }
 
@@ -295,5 +279,3 @@ module.exports = {
 	verifyOtpSendFromForgotPasswordController,
 	resetPasswordController,
 };
-
-

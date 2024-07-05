@@ -23,4 +23,12 @@ const publishLoginOTP = (email, otp) => {
     publishMessage("auth-otp-topic", JSON.stringify({email, otp}));
 }
 
-module.exports = {publishLoginOTP}
+const publishNewUser = (userID, username, email, role) => {
+    publishMessage("new-user-topic", JSON.stringify({userID, username, email, role}));
+    console.log("new user loggedin message published");
+}
+
+module.exports = {
+    publishLoginOTP, 
+    publishNewUser
+}
