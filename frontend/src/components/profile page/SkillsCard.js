@@ -2,12 +2,20 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import { axiosInstance } from '../../helpers/axios';
 import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateSkillsAction } from '../../redux toolkit/profileSlice';
 
-function SkillsCard({skills, editAccess}) {
+function SkillsCard({editAccess}) {
+	const dispatch = useDispatch();
+	const skills = useSelector(store => store?.profile?.skills);
+
 	const { register, formState: { errors }, handleSubmit } = useForm(); //a part of react-hook-form
     const onSubmit = (data) => {
 		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/skills", data)
-		.then(resp => showSuccessToast(resp.data.message))
+		.then(resp => {
+			dispatch(updateSkillsAction(data))
+			showSuccessToast(resp.data.message);
+		})
 		.catch(error => showErrorToast(error.message))
 	} 
 

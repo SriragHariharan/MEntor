@@ -4,15 +4,23 @@ import { FaGraduationCap } from 'react-icons/fa6';
 import { GiBrain } from "react-icons/gi";
 import { axiosInstance } from '../../helpers/axios';
 import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateExperienceAction } from '../../redux toolkit/profileSlice';
 
-function ExperienceCard({experience, editAccess}) {
+function ExperienceCard({editAccess}) {
+	
+	const dispatch = useDispatch();
+	const experience = useSelector(store => store?.profile?.experience);
 
 	console.log(experience.length);
 	const { register, formState: { errors }, handleSubmit } = useForm(); //a part of react-hook-form
     const onSubmit = (data) => {
 		console.log(data);
 		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/experience", data)
-		.then(resp => showSuccessToast(resp.data.message))
+		.then(resp => {
+			showSuccessToast(resp.data.message)
+			dispatch(updateExperienceAction(data))
+		})
 		.catch(error => showErrorToast(error.message))
 	} 
 
@@ -39,7 +47,7 @@ function ExperienceCard({experience, editAccess}) {
 					<ul class="list-none mb-4">
 						{
 							(experience.length > 0) ? (
-								experience.reverse().map(exp => 
+								experience?.map(exp => 
 									<li class="py-4 border-b border-gray-200">
 										<div class="flex items-center">
 											<div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">

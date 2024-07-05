@@ -3,13 +3,23 @@ import { FaGraduationCap } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from '../../helpers/axios';
 import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateEducationAction } from '../../redux toolkit/profileSlice';
 
-function EducationCard({education, editAccess}) {
+function EducationCard({ editAccess}) {
 	const { register, formState: { errors }, handleSubmit } = useForm(); //a part of react-hook-form
+	const dispatch = useDispatch();
+
+	const education = useSelector(store => store?.profile?.education)
+	console.log("current education: " + education)
+
     const onSubmit = (data) => {
 		console.log(data);
 		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/education", {data})
-		.then(resp => showSuccessToast(resp.data.message))
+		.then(resp => {
+			dispatch(updateEducationAction(data))
+			showSuccessToast(resp.data.message)
+		})
 		.catch(error => showErrorToast(error.message))
 	}
 

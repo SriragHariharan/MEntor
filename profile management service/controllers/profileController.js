@@ -110,7 +110,7 @@ const updateCoverPictureController = async(req, res) => {
         if(coverUpdatedResp.modifiedCount !==1){
             return next({status:400, message:"Unable to update profile picture"})
         }
-        return res.status(201).json({success:true, message:"Profile picture updated", data:{coverPic:coverUpdatedResp.secure_url}})
+        return res.status(201).json({success:true, message:"Cover picture updated", data:{coverPic:imgUploadResp.secure_url}})
     } catch (error) {
         console.log("img upload error ::;",error)
         next(error.message)

@@ -5,8 +5,18 @@ import { FaLinkedin } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa6";
 import { axiosInstance } from '../../helpers/axios';
 import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeUserDetails, updateCoverPic, updateProfilePic } from '../../redux toolkit/profileSlice';
 
-function ProfileDetailsCard({profileDetails, editAccess}) {
+function ProfileDetailsCard({editAccess}) {
+	const dispatch = useDispatch();
+	const profileDetails = useSelector(store => store.profile?.user);
+	const followersCount = useSelector(store => store.profile?.followers);
+	const profilePic = useSelector(store => store.profile?.profilePic);
+	const coverPic = useSelector(store => store.profile?.coverPic);
+
+	// console.log("user loaded from rtk :::", user);
+
 
 	const fileToBase64 = (file) => {
 		return new Promise((resolve, reject) => {
@@ -18,7 +28,7 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 	};
 
 	//destructuring props
-	const {username, profilePic, coverPic, bio, about, jobDescription, githubLink, linkedInLink, skills, followers} = profileDetails;
+	const {username, bio, about, jobDescription, githubLink, linkedInLink, skills} = profileDetails;
 
 	const [profileImageLink, setProfileImageLink] = useState(null);
 	const [coverImageLink, setCoverImageLink] = useState(null);
@@ -59,8 +69,11 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 		e.preventDefault();
 		let data = {username:name, jobDescription:title, bio:myBio, about:aboutMe, githubLink:myGithubLink, linkedInLink:myLinkedInLink}
 		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/details", data)
-		.then(resp => console.log(resp))
-		.catch(error => console.log(error))
+		.then(resp => {
+			showSuccessToast(resp.data.message);
+			dispatch(changeUserDetails(data))
+		})
+		.catch(error => showErrorToast(error.message))
 	}
 
 	//update profile picture
@@ -70,10 +83,9 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/picture/profile", {base64Image})
 		.then(resp => {
 			setIsImageUploading(false);
-			setProfileImage(null);
-			setProfileImageLink(null)
 			showSuccessToast(resp.data.message);
 			//set image to rtk
+			dispatch(updateProfilePic(resp.data.data.profilePic));
 		})
 		.catch(error => {
 			setIsImageUploading(false);
@@ -88,10 +100,9 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/picture/cover", {base64Image})
 		.then(resp => {
 			setIsImageUploading(false);
-			setProfileImage(null);
-			setProfileImageLink(null)
 			showSuccessToast(resp.data.message);
 			//set image to rtk
+			dispatch(updateCoverPic(resp.data.data.coverPic));
 		})
 		.catch(error => {
 			setIsImageUploading(false);
@@ -104,7 +115,11 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 		console.log(imgType);
 		//delete picture from cloudinary and set to null;
 		axiosInstance.delete(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/picture/"+ imgType)
-		.then(resp => showSuccessToast(resp.data.message))
+		.then(resp => {
+			showSuccessToast(resp.data.message);
+			if(imgType ==="cover") dispatch(updateCoverPic(null));
+			if(imgType ==="profile") dispatch(updateProfilePic(null));
+		})
 		.catch(error => showErrorToast(error.message));
 	}
 
@@ -123,13 +138,13 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 					}
 					<img
 						class="w-full h-96 md:h-96 object-cover"
-						src={coverPic?.secure_url ?? DEFAULT_COVER_IMG}
+						src={coverPic ?? DEFAULT_COVER_IMG}
 						alt="Cover Picture"
 					/>
 					<div class="absolute top-full left-1/4 transform -translate-x-1/2 -translate-y-1/2">
 						<img
 						class="h-36 w-36 lg:h-64 lg:w-64 lg:rounded-full border-4 border-white object-cover"
-						src={profilePic?.secure_url ?? DEFAULT_USER_IMG }
+						src={profilePic ?? DEFAULT_USER_IMG }
 						alt="Profile Picture"
 						/>
 						{
@@ -170,7 +185,7 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 						<div class="mt-4 flex items-center">
 							<FaUserFriends className="text-xl text-gray-600 dark:text-gray-400" />
 							<span class="ml-2 text-gray-700 dark:text-gray-400">
-								{followers.length} connections
+								{followersCount?.length} connections
 							</span>
 						</div>
 						<p class="mt-4 text-gray-600  dark:text-gray-400">
@@ -178,13 +193,13 @@ function ProfileDetailsCard({profileDetails, editAccess}) {
 						</p>
 						<div class="mt-4">
 							<h4 class="text-sm font-semibold text-gray-900 dark:text-gray-300">
-								Top skills:{skills.length}
+								Top skills:
 							</h4>
 							{
-								(skills.length > 0) ? (
+								(skills?.length > 0) ? (
 									<ul class="list-disc list-inside text-gray-700  dark:text-gray-400">
 										{
-											skills.map(skill => <li>{skill.skill}</li> )
+											skills?.map(skill => <li>{skill?.skill}</li> )
 										}
 											
 									</ul>
