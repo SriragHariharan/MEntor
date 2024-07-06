@@ -83,7 +83,7 @@ function Signup() {
 								{...register("username", {
 									required: true,
 									minLength: 4,
-									maxLength: 15,
+									maxLength: 36,
 								})}
 								type="text"
 								class="w-full pl-4 text-sm text-gray-700"

@@ -1,6 +1,6 @@
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import { ToastContainer } from "react-toastify";
-import useRoutes from './helpers/useRoutes';
+import useRoutes from './hooks/useRoutes';
 import { RouterProvider } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 

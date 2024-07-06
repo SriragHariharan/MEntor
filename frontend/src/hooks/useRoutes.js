@@ -12,7 +12,7 @@ import LandingPage from '../pages/LandingPage';
 import Login from "../pages/authentication/Login";
 import Signup from "../pages/authentication/Signup";
 import MenteeProtectedRoutes from '../layouts/MenteeProtectedRoutes';
-import ProfilePage from '../pages/ProfilePage';
+import ProfilePage from '../pages/MyProfilePage';
 import Mentors from '../pages/Mentors';
 import Notifications from '../pages/Notifications';
 import InterviewsPage from '../pages/InterviewsPage';
@@ -26,7 +26,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import VerifyPwdOtp from "../pages/authentication/VerifyPwdOtp";
 import { jwtDecode } from 'jwt-decode';
 import { logoutUserAction } from "../redux toolkit/userSlice";
-import { showErrorToast } from "./ToastMessageHelpers";
+import { showErrorToast } from "../helpers/ToastMessageHelpers";
+import OtherProfile from "../pages/OtherProfile";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -38,7 +39,6 @@ function useRoutes() {
 			const expirationTime = decodedToken.exp * 1000; // convert to milliseconds
 	
 			if (expirationTime < Date.now()) {
-				console.log("token expired");
 				showErrorToast("Session expired. Login to continue")
 				dispatch(logoutUserAction())
 			}else{
@@ -73,6 +73,7 @@ function useRoutes() {
 						<Route path="/mentee/mentors" element={<Mentors />} />
 						<Route path="/mentee/notifications" element={<Notifications />} />
 						<Route path="/mentee/interviews" element={<InterviewsPage />} />
+						<Route path="/mentee/:id/profile" element={<OtherProfile />} />
 					</Route>
 				</Route>
                 

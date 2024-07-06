@@ -19,14 +19,18 @@ import { TbPigMoney } from "react-icons/tb";
 
 import { MdDarkMode } from "react-icons/md";
 import { IoMdSunny } from "react-icons/io";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAction } from "../../redux toolkit/userSlice";
+import { toggleTheme } from "../../redux toolkit/themeSlice";
+import { DEFAULT_USER_IMG } from "../../helpers/CONSTANTS";
 
 function MentorNavbar() {
 	const dispatch = useDispatch();
 	const logoutMentor = () => {
 		dispatch(logoutUserAction())
 	}
+	const isDarkTheme = useSelector((store) => store?.isDark?.isThemeDark);
+	const profilePic = useSelector(store => store.profile?.profilePic);
 
 	return (
 		<div className="">
@@ -55,11 +59,15 @@ function MentorNavbar() {
 						<div className="flex items-center">
 							<div className="flex items-center ms-3">
 								<div className="flex items-center gap-4">
-									<MdDarkMode className="cursor-pointer w-8 h-8 text-gray-500" />
-									<IoMdSunny className="cursor-pointer w-8 h-8 text-yellow-300" />
+									{/* dark light toggle */}
+									{isDarkTheme ? (
+										<IoMdSunny onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-8 h-8 text-yellow-300" />
+									) : (
+										<MdDarkMode  onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-8 h-8 text-gray-500" />
+									)}									
 									<img
 										className="w-10 h-10 rounded-full cursor-pointer"
-										src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										src={profilePic ?? DEFAULT_USER_IMG}
 										alt="user photo"
 									/>
 								</div>

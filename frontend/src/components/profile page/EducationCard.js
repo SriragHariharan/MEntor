@@ -6,12 +6,9 @@ import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelp
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEducationAction } from '../../redux toolkit/profileSlice';
 
-function EducationCard({ editAccess}) {
+function EducationCard({education, editAccess}) {
 	const { register, formState: { errors }, handleSubmit } = useForm(); //a part of react-hook-form
 	const dispatch = useDispatch();
-
-	const education = useSelector(store => store?.profile?.education)
-	console.log("current education: " + education)
 
     const onSubmit = (data) => {
 		console.log(data);

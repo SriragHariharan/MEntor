@@ -7,16 +7,10 @@ import { axiosInstance } from '../../helpers/axios';
 import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeUserDetails, updateCoverPic, updateProfilePic } from '../../redux toolkit/profileSlice';
+import { DEFAULT_COVER_IMG, DEFAULT_USER_IMG } from '../../helpers/CONSTANTS';
 
-function ProfileDetailsCard({editAccess}) {
+function ProfileDetailsCard({profileDetails,followersCount,profilePic, coverPic, editAccess}) {
 	const dispatch = useDispatch();
-	const profileDetails = useSelector(store => store.profile?.user);
-	const followersCount = useSelector(store => store.profile?.followers);
-	const profilePic = useSelector(store => store.profile?.profilePic);
-	const coverPic = useSelector(store => store.profile?.coverPic);
-
-	// console.log("user loaded from rtk :::", user);
-
 
 	const fileToBase64 = (file) => {
 		return new Promise((resolve, reject) => {
@@ -44,9 +38,6 @@ function ProfileDetailsCard({editAccess}) {
 		setCoverImage(e.target.files[0]);
         setCoverImageLink(URL.createObjectURL(e.target.files[0]));
     };
-
-	const DEFAULT_USER_IMG = "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg"
-	const DEFAULT_COVER_IMG = "https://xansan.com/wp-content/uploads/2018/10/default-cover.gif"
 
 	const [name, setName] = useState("")
 	const [title, setTitle] = useState("")
@@ -137,7 +128,7 @@ function ProfileDetailsCard({editAccess}) {
 						)
 					}
 					<img
-						class="w-full h-96 md:h-96 object-cover"
+						class="w-full h-48 md:h-64 object-cover"
 						src={coverPic ?? DEFAULT_COVER_IMG}
 						alt="Cover Picture"
 					/>

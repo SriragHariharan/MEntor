@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../../redux toolkit/themeSlice';
 import { logoutUserAction } from '../../redux toolkit/userSlice';
+import { DEFAULT_USER_IMG } from '../../helpers/CONSTANTS';
 
 function Navbar() {
 	const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function Navbar() {
 	const logoutMentee = () => {
 		dispatch(logoutUserAction())
 	}
+	const profilePic = useSelector(store => store.profile?.profilePic);
 
   return (
 		<div className="">
@@ -63,8 +65,8 @@ function Navbar() {
 									)}
 
 									<img
-										className="w-10 h-10 rounded-full cursor-pointer"
-										src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										className="w-10 h-10 rounded-full object-cover cursor-pointer"
+										src={profilePic ?? DEFAULT_USER_IMG}
 										alt="user photo"
 									/>
 								</div>

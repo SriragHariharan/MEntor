@@ -5,10 +5,8 @@ import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelp
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSkillsAction } from '../../redux toolkit/profileSlice';
 
-function SkillsCard({editAccess}) {
+function SkillsCard({skills, editAccess}) {
 	const dispatch = useDispatch();
-	const skills = useSelector(store => store?.profile?.skills);
-
 	const { register, formState: { errors }, handleSubmit } = useForm(); //a part of react-hook-form
     const onSubmit = (data) => {
 		axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/profile/skills", data)

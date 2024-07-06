@@ -18,7 +18,7 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      console.log("use unauthenticated")
+      console.log("user unauthenticated")
       localStorage.clear()
       window.location.href = '/mentee/login';
     }

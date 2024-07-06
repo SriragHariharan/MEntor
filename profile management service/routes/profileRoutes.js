@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const authMiddleware = require("../authMiddleware");
+const { allMentorsController, getUserDetailsController } = require("../controllers/mentorsController");
 const { 
     MyProfileDetailsController,
     addEducationController,
@@ -35,5 +36,10 @@ router.post("/profile/picture/cover", authMiddleware, updateCoverPictureControll
 //update cover picture
 router.delete("/profile/picture/:imageType", authMiddleware, deleteUserPictureController);
 
+//get list of all mentors
+router.get("/users/mentors", authMiddleware, allMentorsController)
+
+//get profile details of a specific user
+router.get("/users/:userID/profile", authMiddleware, getUserDetailsController)
 
 module.exports = router;

@@ -7,12 +7,9 @@ import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelp
 import { useDispatch, useSelector } from 'react-redux';
 import { updateExperienceAction } from '../../redux toolkit/profileSlice';
 
-function ExperienceCard({editAccess}) {
+function ExperienceCard({experience, editAccess}) {
 	
 	const dispatch = useDispatch();
-	const experience = useSelector(store => store?.profile?.experience);
-
-	console.log(experience.length);
 	const { register, formState: { errors }, handleSubmit } = useForm(); //a part of react-hook-form
     const onSubmit = (data) => {
 		console.log(data);
