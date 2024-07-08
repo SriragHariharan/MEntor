@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../assets/images/landingpage/mentor logo.jpg";
+import { Link } from "react-router-dom"
 
 //react icons
 import { MdDashboardCustomize } from "react-icons/md";
@@ -92,10 +93,10 @@ function MentorNavbar() {
 							<BsFilePost className="text-2xl" />
 							<span className="ms-3">Feed</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentee/mentors"} className="flex items-center p-2 text-green-500">
 							<FaPeopleGroup className="text-2xl" />
 							<span className="ms-3">Mentors</span>
-						</div>
+						</Link>
 						<div className="flex items-center p-2 text-green-500">
 							<PiStudentBold className="text-2xl" />
 							<span className="ms-3">Mentees</span>
@@ -119,10 +120,10 @@ function MentorNavbar() {
 							<MdWork className="text-2xl" />
 							<span className="ms-3">Interviews</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentee/slots/add"} className="flex items-center p-2 text-green-500">
 							<FaCheckToSlot className="text-2xl" />
 							<span className="ms-3">Slots</span>
-						</div>
+						</Link>
 						<div className="flex items-center p-2 text-green-500">
 							<TbPigMoney className="text-2xl" />
 							<span className="ms-3">Revenue</span>
@@ -134,10 +135,10 @@ function MentorNavbar() {
 								3
 							</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentee/profile"} className="flex items-center p-2 text-green-500">
 							<FaGear className="text-2xl" />
 							<span className="ms-3">Profile</span>
-						</div>
+						</Link>
 					</div>
 					<div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
 						<div className="flex items-center p-2 text-gray-500">
