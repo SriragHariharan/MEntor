@@ -1,5 +1,11 @@
 const authMiddleware = require('../authMiddleware');
-const { addNewSlotController, getSlotsByDateController, getMySlotsByDateController, deleteAspecificSlotController } = require('../controllers/interviewController');
+const { 
+    addNewSlotController, 
+    getSlotsByDateController, 
+    getMySlotsByDateController, 
+    deleteAspecificSlotController, 
+    getMentorSlotsByDateController 
+} = require('../controllers/interviewController');
 
 const router = require('express').Router();
 
@@ -14,5 +20,8 @@ router.post("/slots", authMiddleware, getSlotsByDateController )
 
 //get my slots by date
 router.post("/slots/me", authMiddleware, getMySlotsByDateController)
+
+//get slots of a specific mentor by date
+router.post("/slots/mentor/", authMiddleware, getMentorSlotsByDateController)
 
 module.exports = router;

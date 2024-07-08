@@ -65,7 +65,7 @@ function ProfilePage() {
                 <EducationCard education={education} editAccess={editAccess} />
                 <ExperienceCard experience={experience} editAccess={editAccess} />
                 <SkillsCard skills={skills} editAccess={editAccess} />
-                <SlotsPage />
+                {/* <SlotsPage /> */}
             </div>
         </div>
   )

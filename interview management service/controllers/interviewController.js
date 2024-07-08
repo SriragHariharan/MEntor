@@ -70,9 +70,6 @@ const getMySlotsByDateController = async(req, res, next) => {
     try {
         let {date} = req.body;
         let slots = await Mentor.findOne({userID:req.user?.userID,},{slots:1, _id:0});
-        console.log(slots.slots)
-        console.log(date)
-
         let filteredSlots = slots?.slots?.filter(slot => slot?.date?.toISOString().split('T')[0].includes(date.split('T')[0]))
         return res.status(200).json({success:true, message:null, data:{slots:filteredSlots}});
     } catch (error) {
@@ -99,10 +96,28 @@ const deleteAspecificSlotController = async(req, res, next) => {
     }
 }
 
+//get the slots of a specific mentor on a specific date
+const getMentorSlotsByDateController = async(req, res, next) => { 
+    try {
+        let { date, mentorID } = req.body;
+        let slots = await Mentor.findOne({ userID:mentorID },{slots:1, _id:0});
+        let filteredSlots = slots?.slots?.filter(slot => slot?.date?.toISOString().split('T')[0].includes(date.split('T')[0]))
+        return res.status(200).json({success:true, message:null, data:{slots:filteredSlots}});
+    } catch (error) {
+        console.log(error);
+        next(error?.message)
+    }
+}
+
+
+
+
+
 module.exports = {
     createProfile,
     addNewSlotController,
     getSlotsByDateController,
     getMySlotsByDateController,
     deleteAspecificSlotController,
+    getMentorSlotsByDateController,
 }
