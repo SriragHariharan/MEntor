@@ -4,13 +4,18 @@ const {
     getSlotsByDateController, 
     getMySlotsByDateController, 
     deleteAspecificSlotController, 
-    getMentorSlotsByDateController 
+    getMentorSlotsByDateController, 
+    addReccuringSlotsController
 } = require('../controllers/interviewController');
 
 const router = require('express').Router();
 
 //add new slot
-router.post("/slot/add", authMiddleware, addNewSlotController)
+router.post("/slot/add/single", authMiddleware, addNewSlotController)
+
+//add new recurring slot
+router.post("/slot/add/reccuring", authMiddleware, addReccuringSlotsController)
+
 
 //delete slot
 router.delete("/slot/:slotID/delete", authMiddleware, deleteAspecificSlotController)

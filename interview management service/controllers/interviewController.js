@@ -1,6 +1,7 @@
 const Mentor = require("../models/mentorModel")
 const Mentee = require("../models/menteeModel");
 const Slot = require("../models/slotModel");
+const getDates = require('../momentHelpers');
 
 //create  new user from kafka message
 const createProfile = async(messageData) => {
@@ -46,6 +47,26 @@ const addNewSlotController = async(req, res, next) => {
         return next(error?.message)
     }
 };
+
+//add reccuring slots
+const addReccuringSlotsController = async(req, res, next) => {
+    try {
+        const {userID, role} = req.user;
+        if(role !== 'mentor'){
+            return next({status:401, message:"User Unauthorized"})
+        }
+        // Get the current date
+        const {time, amount} = req.body;
+        const dates = getDates(req.body.type);
+        //insert to insert slots to db
+        for(let i = 0; i < dates.length; i++) {
+            await Mentor.updateOne({userID}, {$push:{slots:{date: dates[i], time, amount}}})
+        }
+        return res.status(201).json({success:true, message:"Slot added", data:{}})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 //get slots by specific date
 const getSlotsByDateController = async(req, res, next) => {
@@ -120,4 +141,5 @@ module.exports = {
     getMySlotsByDateController,
     deleteAspecificSlotController,
     getMentorSlotsByDateController,
+    addReccuringSlotsController,
 }
