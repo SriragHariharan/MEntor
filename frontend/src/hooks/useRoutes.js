@@ -29,6 +29,7 @@ import { logoutUserAction } from "../redux toolkit/userSlice";
 import { showErrorToast } from "../helpers/ToastMessageHelpers";
 import OtherProfile from "../pages/OtherProfile";
 import AddSlotsPage from "../pages/AddSlotsPage";
+import Chats from "../pages/Chats";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -76,6 +77,7 @@ function useRoutes() {
 						<Route path="/mentee/interviews" element={<InterviewsPage />} />
 						<Route path="/mentee/:id/profile" element={<OtherProfile />} />
 						<Route path="/mentee/slots/add" element={<AddSlotsPage />} />
+						<Route path="/mentee/chats" element={<Chats />} />
 					</Route>
 				</Route>
                 

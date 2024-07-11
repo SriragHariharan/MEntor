@@ -8,7 +8,12 @@ module.exports = {
     "./node_modules/flowbite/**/*.js"
   ],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        'screen-85': '85vh',
+        'screen-95': '95vh',
+      }
+    },
   },
   plugins: [
     flowbite.plugin(),

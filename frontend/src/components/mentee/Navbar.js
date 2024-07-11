@@ -102,13 +102,13 @@ function Navbar() {
 							<FaLaptopCode className="text-2xl" />
 							<span className="ms-3">Webinars</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentee/chats"} className="flex items-center p-2 text-green-500">
 							<BsChatSquareText className="text-2xl" />
 							<span className="ms-3">Chats</span>
 							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
 								3
 							</span>
-						</div>
+						</Link>
 						<div className="flex items-center p-2 text-green-500">
 							<GiPublicSpeaker className="text-2xl" />
 							<span className="ms-3">Rooms</span>
