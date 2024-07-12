@@ -23,8 +23,12 @@ function Login() {
 	const onSubmit = (data) => {
 		loginUser(data)
 			.then(resp => {
+				if(resp?.data?.accountVerified == false){
+					navigate("/auth/approval");
+					return;
+				}
 				dispatch(loginUserAction(resp.data))
-				navigate("/mentee/profile")	
+				navigate(`/${resp?.data?.data?.role}/profile`)	
 			})
 			.catch((err) => showErrorToast(err))
 	};

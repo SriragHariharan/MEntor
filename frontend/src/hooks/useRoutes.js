@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 //layouts
-import MenteeRootLayout from '../layouts/MenteeRootLayout';
+import MenteeRootLayout from '../layouts/RootLayout';
 
 //pages
 import LandingPage from '../pages/LandingPage';
@@ -16,7 +16,7 @@ import ProfilePage from '../pages/MyProfilePage';
 import Mentors from '../pages/Mentors';
 import Notifications from '../pages/Notifications';
 import InterviewsPage from '../pages/InterviewsPage';
-import MenteeAuthRoutes from '../layouts/MenteeAuthRoutes';
+import AuthRoutes from '../layouts/AuthRoutes';
 import VerifyOtp from '../pages/authentication/VerifyOtp';
 import ForgotPassword from '../pages/authentication/ForgotPassword';
 import ResetPassword from '../pages/authentication/ResetPassword';
@@ -30,6 +30,9 @@ import { showErrorToast } from "../helpers/ToastMessageHelpers";
 import OtherProfile from "../pages/OtherProfile";
 import AddSlotsPage from "../pages/AddSlotsPage";
 import Chats from "../pages/Chats";
+import MentorProtectedRoutes from "../layouts/MentorProtectedRoutes";
+import MentorSignup from "../pages/authentication/MentorSignup";
+import MentorApprovalPage from "../pages/MentorApprovalPage";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -58,30 +61,41 @@ function useRoutes() {
 				<Route path="/" element={<LandingPage />} />
 
 				{/* mentee routes */}
-				<Route path="/mentee" element={<MenteeRootLayout />}>
-                    <Route path='/mentee' element={<MenteeAuthRoutes user={USER?.token} role={USER?.role} />}>
+				{/* <Route path="/user" element={<MenteeRootLayout />}> */}
+                    <Route path='/auth' element={<AuthRoutes user={USER?.token} role={USER?.role} />}>
                         <Route path="login" element={<Login />} />
-                        <Route path="signup" element={<Signup />} />
+                        <Route path="/auth/mentee" element={<Signup />} />
+						<Route path="/auth/mentor" element={<MentorSignup />} />
 						<Route path="verifyOTP" element={<VerifyOtp />} />
 						<Route path="verify-email" element={<VerifyEmail />} />
 						<Route path="forgot-password" element={<ForgotPassword />} />
 						<Route path="reset-password" element={<ResetPassword />} />
 						<Route path="select-role" element={<SelectRole />} />
 						<Route path="verify-password-otp" element={<VerifyPwdOtp />} />
+						<Route path="approval" element={<MentorApprovalPage />} />
                     </Route>
-					{/* Mentee Protected Routes */}
-					<Route path='/mentee' element={<MenteeProtectedRoutes user={USER?.token} role={USER?.role}  />}>
-						<Route path="/mentee/profile" element={<ProfilePage />} />
-						<Route path="/mentee/mentors" element={<Mentors />} />
-						<Route path="/mentee/notifications" element={<Notifications />} />
-						<Route path="/mentee/interviews" element={<InterviewsPage />} />
-						<Route path="/mentee/:id/profile" element={<OtherProfile />} />
-						<Route path="/mentee/slots/add" element={<AddSlotsPage />} />
-						<Route path="/mentee/chats" element={<Chats />} />
-					</Route>
+				{/* </Route> */}
+
+				{/* Mentee Protected Routes */}
+				<Route path='/mentee' element={<MenteeProtectedRoutes user={USER?.token} role={USER?.role}  />}>
+					<Route path="/mentee/profile" element={<ProfilePage />} />
+					<Route path="/mentee/mentors" element={<Mentors />} />
+					<Route path="/mentee/notifications" element={<Notifications />} />
+					<Route path="/mentee/interviews" element={<InterviewsPage />} />
+					<Route path="/mentee/:id/profile" element={<OtherProfile />} />
+					<Route path="/mentee/chats" element={<Chats />} />
 				</Route>
                 
 				{/* mentor routes */}
+				<Route path='/mentor' element={<MentorProtectedRoutes user={USER?.token} role={USER?.role}  />}>
+					<Route path="/mentor/profile" element={<ProfilePage />} />
+					<Route path="/mentor/mentors" element={<Mentors />} />
+					<Route path="/mentor/notifications" element={<Notifications />} />
+					<Route path="/mentor/interviews" element={<InterviewsPage />} />
+					<Route path="/mentor/:id/profile" element={<OtherProfile />} />
+					<Route path="/mentor/slots/add" element={<AddSlotsPage />} />
+					<Route path="/mentor/chats" element={<Chats />} />
+				</Route>
 
 			</>
 		)

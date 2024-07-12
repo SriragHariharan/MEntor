@@ -1,4 +1,5 @@
 const User = require("../models/userSchema");
+const Mentor = require("../models/mentorSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { publishLoginOTP, publishNewUser } = require("../helpers/kafkaProducer");
@@ -42,46 +43,104 @@ const signupUserController =  async (req, res, next) => {
 	}
 }
 
+//signpup a new mentor
+const signupMentorController =  async (req, res, next) => {
+	try {
+		const existingUser = await User.findOne({ email: req.body.email });
+		if (existingUser) return next({ status: 409, message: "User already exists" });
+		req.body.password = await bcrypt.hash(req.body.password, 10);
+		const newUserObj = new Mentor({
+			...req.body,
+			password: req.body.password,
+		});
+		const savedUser = await newUserObj.save();
+		const { username, email, role, _id } = savedUser;
+        //generate otp
+        const otp = generateOTP(6);
+        console.log("otp generated :", otp);
+        //store otp in REDIS DB
+        redis.set(email, otp);
+        redis.expire(email, process.env.OTP_VALIDATION_TIME);
+        redis.set(`det_${email}`, JSON.stringify({username, email, role, userID:_id}));
+        //send otp to the email service below
+		publishLoginOTP(email, otp)
+		//returning a reponse
+		return res
+			.status(201)
+			.json({success: true, message: "account created", data: {username, email, accountVerified:false}});
+	} catch (error) {
+		next(error.message);
+	}
+}
+
 //login an existing user
 const loginUserController =  async (req, res, next) => {
 	try {
 		console.log(req.body);
-		const existingUser = await User.findOne({
-			email: req.body.email,
-			loginType: "local",
-		});
+		const existingUser = await User.findOne({email: req.body.email, loginType: "local"});
+		const existingMentor = await Mentor.findOne({email: req.body.email, loginType: "local"});
 		console.log(existingUser);
-		if (!existingUser)
+		if (existingUser &&  !existingMentor){
 			return next({ status: 401, message: "Invalid login credentials" });
-		let isPasswordValid = await bcrypt.compare(
-			req.body?.password,
-			existingUser?.password
-		);
-		if (!isPasswordValid)
-			return next({ status: 401, message: "Invalid login credentials" });
-		else {
-			const { username, email, role, _id } = existingUser;
-			//sign a jwt token
-			const payload = { email, role, userID: _id };
-			const accessToken = generateToken(
-				process.env.ACCESS_TOKEN_SECRET,
-				payload,
-				process.env.AX_TOKEN_EXP_TIME
-			);
-			//returning a reponse
-			return res
-				.status(201)
-				.json({
-					success: true,
-					message: "Login success",
-					data: {
-						token: accessToken,
-						username,
-						email,
-						profilePicture: existingUser.profilePicture,
-						role
-					},
-				});
+		}
+		//if login role is mentee
+		else if (existingUser && !existingMentor){
+			let isPasswordValid = await bcrypt.compare( req.body?.password, existingUser?.password);
+			if (!isPasswordValid)
+				return next({ status: 401, message: "Invalid login credentials" });
+			else {
+				const { username, email, role, _id } = existingUser;
+				//sign a jwt token
+				const payload = { email, role, userID: _id };
+				const accessToken = generateToken(
+					process.env.ACCESS_TOKEN_SECRET,
+					payload,
+					process.env.AX_TOKEN_EXP_TIME
+				);
+				//returning a reponse
+				return res
+					.status(201)
+					.json({
+						success: true,
+						message: "Login success",
+						data: {
+							token: accessToken,
+							username,
+							email,
+							role
+						},
+					});
+			}	
+		}
+		//if signup user is mentor
+		else if (!existingUser && existingMentor){
+			let isPasswordValid = await bcrypt.compare( req.body?.password, existingMentor?.password);
+			if (!isPasswordValid)
+				return next({ status: 401, message: "Invalid login credentials" });
+			else {
+				const { username, email, role, _id, accountVerified } = existingMentor;
+				//sign a jwt token
+				const payload = { email, role, userID: _id };
+				const accessToken = generateToken(
+					process.env.ACCESS_TOKEN_SECRET,
+					payload,
+					process.env.AX_TOKEN_EXP_TIME
+				);
+				//returning a reponse
+				return res
+					.status(201)
+					.json({
+						success: true,
+						message: "Login success",
+						data: {
+							token: accessToken,
+							username,
+							email,
+							role,
+							accountVerified
+						},
+					});
+			}
 		}
 	} catch (error) {
 		next(error.message);
@@ -278,4 +337,5 @@ module.exports = {
 	verifyEmailController,
 	verifyOtpSendFromForgotPasswordController,
 	resetPasswordController,
+	signupMentorController,
 };

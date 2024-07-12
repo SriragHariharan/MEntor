@@ -17,7 +17,7 @@ function HeroSection() {
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur, facere nisi? Quisquam, natus sit incidunt ad error alias aliquam architecto ab! Esse asperiores eveniet fugiat in quas consectetur, quo neque.
             </div>
             <div className="flex mt-6 gap-4 md:gap-8">
-              <Link to={"/mentee/signup"} type="button" class="text-white bg-green-500 hover:bg-green-600 font-medium rounded-full text-sm px-4 py-3 text-center me-2 mb-2">
+              <Link to={"/auth/mentee"} type="button" class="text-white bg-green-500 hover:bg-green-600 font-medium rounded-full text-sm px-4 py-3 text-center me-2 mb-2">
                   Signup for Free &nbsp;&nbsp; <i class="fa-solid fa-arrow-right"></i>
               </Link>
               <button type="button" class="border-2 border-gray-700 text-dark hover:bg-gray-100 font-medium rounded-full text-sm px-4 py-3 text-center me-2 mb-2">

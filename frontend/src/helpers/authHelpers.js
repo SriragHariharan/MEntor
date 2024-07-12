@@ -12,6 +12,18 @@ export const signupUser = (data) => {
     })
 }
 
+export const singupMentor = (data) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let resp = await axios.post(process.env.REACT_APP_USER_SVC_ENDPOINT + "/signup/mentor", data)
+            let jsonData = resp.data;
+            resolve(jsonData);      
+        } catch (error) {
+            reject(error?.response?.data.message);
+        }
+    })
+}
+
 export const loginUser = (data) => {
     console.log(data)
     return new Promise(async(resolve, reject) => {

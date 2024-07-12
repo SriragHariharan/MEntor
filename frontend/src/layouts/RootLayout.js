@@ -1,10 +1,10 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
-function MenteeRootLayout() {
+function RootLayout() {
   return (
     <Outlet/>
   )
 }
 
-export default MenteeRootLayout
+export default RootLayout

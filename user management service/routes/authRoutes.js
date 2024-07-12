@@ -1,10 +1,12 @@
-const { signupUserController, loginUserController, signupGoogleUserController, verifyOtpController, resendOtpController, signupGoogleUserWithRoleController, verifyEmailController, verifyOtpSendFromForgotPasswordController, resetPasswordController } = require('../controllers/authController');
+const { signupUserController, loginUserController, signupGoogleUserController, verifyOtpController, resendOtpController, signupGoogleUserWithRoleController, verifyEmailController, verifyOtpSendFromForgotPasswordController, resetPasswordController, signupMentorController } = require('../controllers/authController');
 
 const router = require('express').Router();
 
 //signpup a new user
 router.post("/signup", signupUserController);
 
+//signpup a new user
+router.post("/signup/mentor", signupMentorController);
 
 //login an existing user
 router.post('/login', loginUserController)
