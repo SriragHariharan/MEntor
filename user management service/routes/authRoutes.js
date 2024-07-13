@@ -1,4 +1,6 @@
+const { loginAdminController, getMentorMenteeCount, isAdminSessionController, getMentorsController, getMenteesController, getApprovalMentorsController } = require('../controllers/adminAuthController');
 const { signupUserController, loginUserController, signupGoogleUserController, verifyOtpController, resendOtpController, signupGoogleUserWithRoleController, verifyEmailController, verifyOtpSendFromForgotPasswordController, resetPasswordController, signupMentorController } = require('../controllers/authController');
+const adminAuthMiddleware = require('../helpers/adminAuthMiddleware');
 
 const router = require('express').Router();
 
@@ -31,5 +33,22 @@ router.post("/password/forgot/otp/resend", verifyOtpSendFromForgotPasswordContro
 
 //reset password to new one
 router.post("/password/reset", resetPasswordController);
+
+//ADMIN ROUTES
+
+//login admin
+router.post("/admin/login", loginAdminController);
+
+//get mentor and mentee count
+router.get("/admin/count/users", adminAuthMiddleware, getMentorMenteeCount);
+
+//get all approved mentors
+router.get("/admin/mentors", adminAuthMiddleware, getMentorsController);
+
+//get all approved mentors
+router.get("/admin/mentors/approval", adminAuthMiddleware,  getApprovalMentorsController);
+
+// get all mentees
+router.get("/admin/mentees", adminAuthMiddleware, getMenteesController);
 
 module.exports = router;
