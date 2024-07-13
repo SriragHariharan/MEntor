@@ -1,20 +1,27 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { useForm } from "react-hook-form";
 import ENDPOINTS from '../configs/endpoints';
 import useAxios from '../hooks/useAxios';
 import { useNavigate } from 'react-router-dom';
+import { SignupContext } from '../contexts/userContext';
 
 
 function Login() {
     const axiosInstance = useAxios();
     const { register, formState: { errors }, handleSubmit } = useForm();
     const navigate = useNavigate();
+    const [error, setError] = useState(null)
+
+    const { signup } = useContext(SignupContext);
 
     const onSubmit = (data) => {
         console.log(data);
         axiosInstance.post(ENDPOINTS.LOGIN, data)
-        .then(resp => navigate("/mentors"))
-        .catch(err => console.log(err));
+        .then(resp => {
+            signup();
+            navigate("/")
+        })
+        .catch(err => setError(err?.response?.data?.message));
     } 
 
   return (
@@ -28,6 +35,7 @@ function Login() {
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Sign in to your account
                     </h1>
+                    <p className="text-center text-red-500 font-bold">{error}</p>
                     <form class="space-y-4 md:space-y-6"  onSubmit={handleSubmit(onSubmit)}>
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>

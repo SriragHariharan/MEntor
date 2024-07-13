@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from "../assets/mentor logo.jpg";
 
 //react icons
@@ -11,9 +11,13 @@ import { PiStudentBold } from "react-icons/pi";
 import { SiTicktick } from "react-icons/si";
 
 import { Link } from 'react-router-dom';
+import { SignupContext } from '../contexts/userContext';
 
 function Navbar() {
-
+	const { logout } = useContext(SignupContext);
+	const handleLogout = () => {
+		logout();
+	}
   return (
 		<div className="">
 			<nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -86,7 +90,7 @@ function Navbar() {
 							<IoIosHelpCircleOutline className="text-2xl" />
 							<span className="ms-3">Help</span>
 						</div>
-						<div className="flex items-center p-2 text-red-500">
+						<div onClick={handleLogout} className="flex items-center p-2 text-red-500 cursor-pointer">
 							<AiOutlineLogout className="text-2xl" />
 							<span className="ms-3">Logout</span>
 						</div>

@@ -17,9 +17,9 @@ function useAxios() {
     },
     (error) => {
         if (error.response && error.response.status === 401) {
-        console.log("user unauthenticated")
-        localStorage.clear()
-        //   window.location.href = '/login';
+            console.log("user unauthenticated")
+            localStorage.removeItem('MEntor_admin')
+            window.location.href = '/login';
         }
         return Promise.reject(error);
     }
