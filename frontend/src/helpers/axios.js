@@ -20,7 +20,11 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       console.log("user unauthenticated")
       localStorage.clear()
-      window.location.href = '/mentee/login';
+      window.location.href = '/auth/login';
+    }
+    if (error.response && error.response.status === 403) {
+      console.log("user blocked")
+      window.location.href = '/auth/blocked';
     }
     return Promise.reject(error);
   }

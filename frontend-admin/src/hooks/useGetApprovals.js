@@ -12,7 +12,7 @@ function useGetApprovals() {
     useEffect(() =>{
         axiosInstance.get(ENDPOINTS.APPROVAL_PENDING_MENTORS)
         .then(resp => setMentors(resp?.data?.data?.mentors))
-        .catch(err => setError(err.data.message));
+        .catch(err => setError(err.message));
     },[])
 
     return {mentors, error};

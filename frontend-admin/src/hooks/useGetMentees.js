@@ -12,7 +12,7 @@ function useGetMentees() {
     useEffect(() =>{
         axiosInstance.get(ENDPOINTS.APPROVED_MENTEES)
         .then(resp => setMentees(resp?.data?.data?.mentees))
-        .catch(err => setError(err.data.message));
+        .catch(err => setError(err.message));
     },[])
 
     return {mentees, error};

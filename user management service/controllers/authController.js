@@ -76,9 +76,13 @@ const signupMentorController =  async (req, res, next) => {
 //login an existing user
 const loginUserController =  async (req, res, next) => {
 	try {
-		console.log(req.body);
 		const existingUser = await User.findOne({email: req.body.email, loginType: "local"});
 		const existingMentor = await Mentor.findOne({email: req.body.email, loginType: "local"});
+		//blocked response
+		console.log(existingUser?.accountBlocked, existingMentor?.accountBlocked)
+		if(existingUser?.accountBlocked === true || existingMentor?.accountBlocked === true) {
+			return next({ status:403, message: "User blocked access"})
+		}
 		console.log(existingUser);
 		if (existingUser &&  !existingMentor){
 			return next({ status: 401, message: "Invalid login credentials" });
@@ -223,11 +227,12 @@ const verifyOtpController = async (req, res, next) => {
         }
         let userDetails = await redis.get("det_"+email);
         userDetails = JSON.parse(userDetails);
-		await User.updateOne({email: email}, {$set:{isEmailVerified: true}})
+		await User.updateOne({email: email}, {$set:{isEmailVerified: true}});
         //signup user by providing username, email and token
         const payload = { username: userDetails?.username, email:userDetails?.email, role:userDetails?.role, userID:userDetails?.userID };
 		//publishing message to topic for other services to get
 		publishNewUser(userDetails?.userID, userDetails?.username, userDetails?.email, userDetails?.role);
+
 			const accessToken = generateToken(process.env.ACCESS_TOKEN_SECRET,payload,process.env.AX_TOKEN_EXP_TIME);
             //deleting data stored in redis 
 			await redis.del("det_"+email);
@@ -241,6 +246,7 @@ const verifyOtpController = async (req, res, next) => {
 						email:userDetails?.email,
 						profilePicture: null,
 						role:userDetails?.role,
+						accountVerified: (userDetails?.role==="mentee") ? true : false
 					},
 				});
     } catch (error) {

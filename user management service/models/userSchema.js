@@ -17,14 +17,13 @@ const userSchema = new mongoose.Schema(
 		},
 		role: {
 			type: String,
-			required: true,
 			default: "mentee",
 		},
 		accountBlocked: {
 			type: Boolean,
 			default: false,
 		},
-		isEmailVerified: {
+		emailVerified: {
 			type: Boolean,
 			default: false,
 		},
@@ -32,11 +31,7 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			enum: ["local", "google"],
 			default: "local",
-		},
-		profilePicture: {
-			type: String,
-			default: null,
-		},
+		}
 	},
 	{ timestamps: true }
 );

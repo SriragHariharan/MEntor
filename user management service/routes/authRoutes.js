@@ -1,4 +1,4 @@
-const { loginAdminController, getMentorMenteeCount, isAdminSessionController, getMentorsController, getMenteesController, getApprovalMentorsController } = require('../controllers/adminAuthController');
+const { loginAdminController, getMentorMenteeCount, isAdminSessionController, getMentorsController, getMenteesController, getApprovalMentorsController, approveMentorController } = require('../controllers/adminAuthController');
 const { signupUserController, loginUserController, signupGoogleUserController, verifyOtpController, resendOtpController, signupGoogleUserWithRoleController, verifyEmailController, verifyOtpSendFromForgotPasswordController, resetPasswordController, signupMentorController } = require('../controllers/authController');
 const adminAuthMiddleware = require('../helpers/adminAuthMiddleware');
 
@@ -50,5 +50,14 @@ router.get("/admin/mentors/approval", adminAuthMiddleware,  getApprovalMentorsCo
 
 // get all mentees
 router.get("/admin/mentees", adminAuthMiddleware, getMenteesController);
+
+//approve a mentor after verification
+router.post("/admin/mentor/approve", adminAuthMiddleware, approveMentorController);
+
+//block a mentor
+// router.post("/admin/mentor/block", adminAuthMiddleware, blockMentorController);
+
+//block a mentee 
+// router.post("/admin/mentee/block", adminAuthMiddleware, blockMentorController);
 
 module.exports = router;

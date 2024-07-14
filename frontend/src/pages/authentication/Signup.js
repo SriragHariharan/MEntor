@@ -58,7 +58,7 @@ function Signup() {
 			.then((resp) => {
 				console.log("resp:", resp);
 				localStorage.setItem("mentor_otp_verification_email", resp?.data?.email);
-				navigate("/mentee/verifyOTP")
+				navigate("/auth/verifyOTP")
 			})
 			.catch((err) => showErrorToast(err));
 	} 
@@ -125,26 +125,6 @@ function Signup() {
 							{errors.email?.type === "pattern" && (
 								<small style={{ color: "red" }}>
 									Please check your email
-								</small>
-							)}
-						</div>
-						<div class="mb-4">
-							<label class="block text-gray-700">
-								Select Role
-							</label>
-							<select
-								{...register("role", {
-									required: true,
-								})}
-								class="w-full pl-4 text-sm text-gray-700"
-							>
-								<option value="">Select Role</option>
-								<option value="mentor">Mentor</option>
-								<option value="mentee">Mentee</option>
-							</select>
-							{errors.role?.type === "required" && (
-								<small style={{ color: "red" }}>
-									Role is required
 								</small>
 							)}
 						</div>

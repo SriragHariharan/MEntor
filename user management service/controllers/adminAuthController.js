@@ -10,8 +10,8 @@ const loginAdminController = async(req, res, next) => {
         if(email !== process.env.ADMIN_EMAIL){
             return next("Invalid login credentials");
         }
-        const isPasswordValid = await bcrypt.compare(password, process.env.ADMIN_PASSWORD);
-        console.log("isPasswordValid ::: " + isPasswordValid)
+        const isPasswordValid = bcrypt.compare(password, process.env.ADMIN_PASSWORD);
+        console.log("isPasswordValid ::: " + isPasswordValid, password, process.env.ADMIN_PASSWORD);
         if (!isPasswordValid) return next("Invalid login credentials");
         
         //Generate a JWT token valid for 10 minutes
@@ -62,10 +62,53 @@ const getApprovalMentorsController = async (req, res, next) => {
     }
 }
 
+const approveMentorController = async (req, res, next) => {
+    try {
+        const { userID } = req.body;
+        let updatedResp = await Mentor.updateOne({_id:userID},{$set:{accountVerified:true, isEmailVerified:true}})
+        if(updatedResp.modifiedCount !== 1){
+            return next("Nothing to approve")
+        }
+        //send message to emai service to dispatch a message to mentor email address
+        return res.status(200).json({success:true, message:"Approval successfull", data:null})
+    } catch (error) {
+        next(error.message);
+    }
+}
+
+const blockMentorController = async (req, res, next) => {
+    try {
+        const { userID } = req.body;
+        let updatedResp = await Mentor.updateOne({_id:userID},{$set:{accountBlocked:true}})
+        if(updatedResp.modifiedCount !== 1){
+            return next("Nothing to approve")
+        }
+        return res.status(200).json({success:true, message:"Blocked successfully", data:null})
+    } catch (error) {
+        next(error.message);
+    }
+}
+
+const blockMenteeController = async (req, res, next) => {
+    try {
+        const { userID } = req.body;
+        let updatedResp = await Mentor.updateOne({_id:userID},{$set:{accountBlocked:true}})
+        if(updatedResp.modifiedCount !== 1){
+            return next("Nothing to approve")
+        }
+        return res.status(200).json({success:true, message:"Blocked successfully", data:null})
+    } catch (error) {
+        next(error.message);
+    }
+}
+
 module.exports = {
 	loginAdminController,
     getMentorMenteeCount,
     getMentorsController,
     getMenteesController,
     getApprovalMentorsController,
+    approveMentorController,
+    blockMentorController,
+    blockMenteeController,
 };

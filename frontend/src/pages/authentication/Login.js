@@ -111,16 +111,8 @@ function Login() {
 								id="password"
 								class="w-full pl-4 text-sm text-gray-700"
 							/>
-							{errors.password?.type === "required" && (
-								<p style={{ color: "red" }}>
-									Password required
-								</p>
-							)}
-							{errors.password?.type === "minLength" && (
-								<p style={{ color: "red" }}>
-									Password should me 6 or more characters
-								</p>
-							)}
+							{errors.password?.type === "required" && (<p style={{ color: "red" }}>Password required</p>)}
+							{errors.password?.type === "minLength" && (<p style={{ color: "red" }}>Password should me 6 or more characters</p>)}
 						</div>
 						<div class="flex justify-between mb-4">
 							<Link to={"/mentee/signup"} className="text-blue-600 font-semibold">

@@ -33,6 +33,7 @@ import Chats from "../pages/Chats";
 import MentorProtectedRoutes from "../layouts/MentorProtectedRoutes";
 import MentorSignup from "../pages/authentication/MentorSignup";
 import MentorApprovalPage from "../pages/MentorApprovalPage";
+import UserBlocked from "../pages/UserBlocked";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -73,6 +74,7 @@ function useRoutes() {
 						<Route path="select-role" element={<SelectRole />} />
 						<Route path="verify-password-otp" element={<VerifyPwdOtp />} />
 						<Route path="approval" element={<MentorApprovalPage />} />
+						<Route path="blocked" element={<UserBlocked />} />
                     </Route>
 				{/* </Route> */}
 

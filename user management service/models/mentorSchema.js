@@ -33,19 +33,15 @@ const mentorSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
-		isEmailVerified: {
+		emailVerified: {
 			type: Boolean,
 			default: false,
 		},
 		loginType: {
 			type: String,
-			enum: ["local", "google"],
+			// enum: ["local", "google"],
 			default: "local",
-		},
-		profilePicture: {
-			type: String,
-			default: null,
-		},
+		}
 	},
 	{ timestamps: true }
 );

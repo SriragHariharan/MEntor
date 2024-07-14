@@ -20,13 +20,14 @@ function VerifyOtp() {
 	const onSubmit = (data) => {
 		verifyOTP(data?.otp)
 		.then(resp => {
-			if(!resp?.data?.data?.accountVerified){
+			if(!resp?.data?.accountVerified){
 				navigate("/auth/approval");
-				return;
 			}
-			//show success toast
-			dispatch(loginUserAction(resp.data))
-			navigate("/mentee/profile")
+			else{
+				//show success toast
+				dispatch(loginUserAction(resp.data))
+				navigate("/mentee/profile")
+			}
 		})
 		.catch(err => showErrorToast(err))
 	}
