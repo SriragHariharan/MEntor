@@ -1,15 +1,19 @@
 import React from 'react'
+import {DEFAULT_USER_IMG} from '../../helpers/CONSTANTS'
 
-function ChatUserHeader() {
-  return (
+function ChatUserHeader({ selectedChat }) {
+
+    const {username, profilePic, userID} = selectedChat;
+
+    return (
         <div class="py-2 px-3 dark:bg-gray-700 flex flex-row justify-between items-center">
             <div class="flex items-center">
                 <div>
-                    <img class="w-10 h-10 rounded-full" src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"/>
+                    <img class="w-10 h-10 rounded-full" src={profilePic ?? DEFAULT_USER_IMG}/>
                 </div>
                 <div class="ml-4">
                     <p class="text-grey-darkest">
-                        New Movie! Expendables 4
+                        {username}
                     </p>
                     {/* <p class="text-grey-darker text-xs mt-1">
                         Andrés, Tom, Harrison, Arnold, Sylvester
