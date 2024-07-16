@@ -83,7 +83,7 @@ function SlotsTable({slots, setSlots, setDate}) {
                     }
                 </tbody>
                 {
-                    slots.length===0 && (
+                    slots?.length===0 && (
                         <tbody className="text-center text-4xl">
                             No slots found in selected date
                         </tbody>

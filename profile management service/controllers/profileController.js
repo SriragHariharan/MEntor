@@ -139,6 +139,34 @@ const deleteUserPictureController = async(req, res, next) => { //coverPic or pro
     }
 }
 
+//get people whom we are following
+const followingMentorsContoller = async(req, res, next) => {
+    try {
+        if(req.user.role === "mentor"){
+            let {followers} = await Profile.findOne({ userID: req.user.userID }, { _id:0, followers:1});
+            let followingDetails = [];
+            for (let i = 0; i < followers.length; i++) {
+                let profile = await Profile.findOne({userID: followers[i]}, {_id:0, username:1, profilePic:1, userID:1});
+                followingDetails.push(profile);
+            }
+            console.log(followingDetails);
+            return res.status(200).json({success: true, message:null, data:{following: followingDetails}})
+        }
+        else{
+            let {following} = await Profile.findOne({ userID: req.user.userID }, { _id:0, following:1});
+            let followingDetails = [];
+            for (let i = 0; i < following.length; i++) {
+                let profile = await Profile.findOne({userID: following[i]}, {_id:0, username:1, profilePic:1, userID:1});
+                followingDetails.push(profile);
+            }
+            console.log(followingDetails);
+            return res.status(200).json({success: true, message:null, data:{following: followingDetails}})
+        }
+    } catch (error) {
+        next(error.message);        
+    }
+}
+
 
 module.exports = {
     createProfile,
@@ -150,4 +178,5 @@ module.exports = {
     updateProfilePictureController,
     updateCoverPictureController,
     deleteUserPictureController,
+    followingMentorsContoller,
 }

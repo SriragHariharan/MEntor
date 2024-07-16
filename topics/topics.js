@@ -22,6 +22,11 @@ const createTopic = async () => {
 					topic: "new-user-topic", // The topic name
 					numPartitions: 1, // The number of partitions
 					replicationFactor: 1, // The replication factor
+				},
+				{
+					topic: "create-chat-topic", // The topic name
+					numPartitions: 1, // The number of partitions
+					replicationFactor: 1, // The replication factor
 				}
 			],
 		});

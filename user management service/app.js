@@ -20,7 +20,7 @@ const AuthRoutes = require("./routes/authRoutes");
 app.use("/api/v1/", AuthRoutes);
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     console.error(err);
     if(err.status){
         return res.status(err.status).json({message: err.message});

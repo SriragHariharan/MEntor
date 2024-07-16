@@ -13,8 +13,10 @@ function Chats() {
     const [following, setFollowing] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
     const [chatID, setChatID] = useState(null);
+    const [userID, setUserID] = useState(null);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("")
+
 
     //enable smooth scrolling
     const messageEndRef = useRef(null);
@@ -23,9 +25,7 @@ function Chats() {
         messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+    useEffect(() => scrollToBottom() , [messages]);
     
     //get the list of mentors I am following
     useEffect(() => {
@@ -40,9 +40,10 @@ function Chats() {
         console.log("am triggered on rerednder")
         axiosInstance.get(process.env.REACT_APP_CHAT_SVC_ENDPOINT + "/chats/"+ selectedChat?.userID)
         .then(resp => {
-            console.log("msg :::",resp.data?.data?.chats?.messages)
-            setChatID(resp.data?.data?.chats?.chatID);
-            setMessages(resp.data?.data?.chats?.messages)
+            //console.log("msg :::",resp.data?.data)
+            setChatID(resp.data?.data?.chatID);
+            setMessages(resp.data?.data?.messages);
+            setUserID(resp.data?.data?.userID);
         })
         .catch(err => console.log(err))
     },[selectedChat])
@@ -52,16 +53,12 @@ function Chats() {
     
     //join a specific room
     useEffect(() => {
-        console.log("am triggered on render or chatID change");
-
-
         // Join the room when the component mounts
         socket.emit('joinRoom', chatID);
 
         if (!listenersSet.current) {
             // Listen for messages in the room
             socket.on('message', (message) => {
-                console.log(message);
                 setMessages((prevMessages) => [...prevMessages, message]);
             });
 
@@ -69,7 +66,14 @@ function Chats() {
             listenersSet.current = true;
         }
 
-        // Clean up when the component unmounts or chatID changes
+        // Emit an event to mark messages as read
+        socket.emit('markMessagesAsRead', chatID);
+
+        socket.on('messagesMarkedAsRead', (chatID) => {
+            setMessages((prevMessages) => prevMessages?.map((msg) => ({ ...msg, isRead: true })));
+        });
+
+        // Clean up
         return () => {
             socket.emit('leaveRoom', chatID);
             socket.off('message'); // Remove the 'message' event listener
@@ -77,11 +81,12 @@ function Chats() {
         };
     }, [chatID]);
 
-    //send message to the joined room
-    const handleSendMessage = () => {
-        socket.emit('sendMessage', { roomId:chatID, message: messageInput });
-    }
 
+
+    const handleSendMessage = () => {
+        if(messageInput == "") return;
+        socket.emit('sendMessage', { roomId:chatID, message: messageInput, senderID:userID });
+    }
 
   return (
         <div class="container mx-auto">
@@ -118,7 +123,9 @@ function Chats() {
                             (messages?.length > 0) && (
                                 <div class="py-2 px-3">
                                     {
-                                        messages?.map(msg => <MyMessage text={msg} /> )
+                                        messages?.map(msg => (
+                                            (userID === msg.senderID) ? <MyMessage msgObj={msg} /> : <OtherMessage msgObj={msg} />
+                                        ))
                                     }
                                     <div ref={messageEndRef} />
                                 </div>

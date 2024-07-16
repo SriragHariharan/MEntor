@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat Room</title>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.js"></script> -->
+</head>
+<body>
+  <h1>Chat Room</h1>
+  <ul id="messages"></ul>
+  <script>
+    const socket = io('http://localhost:6006'); // replace with your socket.io server URL
+    const roomId = "6693a910b5247743b1e7045e-6693a988b5247743b1e70464"
+
+    socket.emit('joinRoom', roomId);
+
+    socket.on('message', (message) => {
+      const messageList = document.getElementById('messages');
+      const messageElement = document.createElement('li');
+      messageElement.textContent = message;
+      messageList.appendChild(messageElement);
+    });
+  </script>
+</body>
+</html>

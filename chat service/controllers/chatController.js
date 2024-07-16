@@ -20,8 +20,8 @@ const getChatsController = async(req, res, next) => {
     try {
         const sortedIds = [req.user.userID, req.params.chatID].sort();
         const mergedIds = sortedIds.join('-');
-        let chats = await Chat.findOne({chatID: mergedIds});
-        return res.status(200).json({success: true, message:null, data:{chats}})
+        let chat = await Chat.findOne({chatID: mergedIds});
+        return res.status(200).json({success: true, message:null, data:{chatID:chat?.chatID, messages:chat?.messages, userID:req.user.userID}});
     } catch (error) {
         next(error.message);
     }

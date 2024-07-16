@@ -84,7 +84,7 @@ const loginUserController =  async (req, res, next) => {
 			return next({ status:403, message: "User blocked access"})
 		}
 		console.log(existingUser);
-		if (existingUser &&  !existingMentor){
+		if (!existingUser &&  !existingMentor){
 			return next({ status: 401, message: "Invalid login credentials" });
 		}
 		//if login role is mentee

@@ -39,7 +39,7 @@ const addNewSlotController = async(req, res, next) => {
             let resp = await Mentor.updateOne({userID}, {$push:{slots:{date, time, amount}}})
             console.log("insertion response: " + resp.upsertedId)
             if(resp?.modifiedCount !== 1){
-                return next({status:401, message:"Unable to add slot"})
+                return next("Unable to add slot")
             }
             return res.status(201).json({success:true, message:"Slot added", data:{slot:{date, time, amount}}})
         }

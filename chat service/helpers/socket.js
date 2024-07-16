@@ -1,4 +1,5 @@
 const { Server } = require('socket.io');
+const Chat = require('../models/chatModel');
 
 const socket = (expressServer) => {
     const io = new Server(expressServer, {
@@ -21,11 +22,24 @@ const socket = (expressServer) => {
             console.log(`Left room ${roomId}`);
         });
 
-        socket.on('sendMessage', (data) => {
+        socket.on('sendMessage', async(data) => {
+            const { roomId, message, senderID } = data;
+            console.log("senderID" + senderID);
+            let msgObj = { message, senderID };
             //save message to database
-            const { roomId, message } = data;
-            io.to(roomId).emit('message', message);
-            console.log(`Sent ${message} to room ${roomId}`);
+            await Chat.updateOne({chatID:roomId}, {$push: {messages: msgObj }})
+            .then(resp => { 
+                console.log(resp)
+                let messageObj = { message, senderID, isRead:false, isDelivered:false, isDeleted:false }
+                io.to(roomId).emit('message', messageObj);
+                console.log(`Sent ${message} to room ${roomId}`);
+                .0
+            }).catch(err => console.log(err));
+        });
+
+        socket.on('markMessagesAsRead', (chatID) => {
+            //change message status in database
+            io.in(chatID).emit('messagesMarkedAsRead');
         });
     });
 }
