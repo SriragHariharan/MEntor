@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { axiosInstance } from '../../helpers/axios';
 import { useParams } from 'react-router-dom';
 import { BsSmartwatch } from "react-icons/bs";
+import SlotAvailableButton from './SlotAvailableButton';
 
-function SlotsPage() {
+function SlotsPage({profileDetails}) {
     const [date, setDate] = useState(new Date()?.toISOString().split('T')[0]);
 	const[slots, setSlots] = useState([]);
 
@@ -54,16 +55,7 @@ function SlotsPage() {
 										<span className="text-xs text-dark opacity-70">₹ {slot?.amount}</span>
 									</div>
 								</button>):(
-								<button
-									className="flex flex-row items-center justify-center bg-green-300 hover:bg-green-400 font-medium rounded-lg py-2 px-4 mb-2"
-								>
-								<BsSmartwatch className="text-2xl text-dark mr-2" />
-								<div className="flex flex-col">
-									<span className="text-sm text-dark">{slot?.time}</span>
-									<span className="text-xs text-dark opacity-70">₹ {slot?.amount}</span>
-								</div>
-								</button>
-
+								<SlotAvailableButton slot={slot} mentorID={profileDetails?.userID} mentor={profileDetails?.username} />
 								)
 						)
 					}

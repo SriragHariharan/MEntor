@@ -1,16 +1,20 @@
 import React from 'react'
+import useGetMeetings from '../hooks/useGetMeetings';
+import InterviewsTable from '../components/interviews/InterviewsTable';
 
 
 function InterviewsPage() {
+	const {meetings, error} = useGetMeetings();
+
   return (
 		<div className="py-10 dark:bg-gray-800 h-screen px-4 lg:px-12">
 			{/* interviews header */}
 			<div className="">
 				<div className="text-3xl font-semibold dark:text-gray-500">
-					Interviews:
+					Meetings:
 				</div>
 				<div className="text-sm font-semibold text-gray-300 dark:text-gray-600 hidden lg:block">
-					Here you will get the details of all the interviews you
+					Here you will get the details of all the meetings you
 					scheduled
 				</div>
 			</div>
@@ -144,6 +148,8 @@ function InterviewsPage() {
 						/>
 					</div>
 				</div>
+
+
 				<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
 					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 						<tr>
@@ -157,7 +163,7 @@ function InterviewsPage() {
 								Mentor name
 							</th>
 							<th scope="col" class="px-6 py-3">
-								Price
+								Price( $ )
 							</th>
 							<th scope="col" class="px-6 py-3">
 								Status
@@ -171,81 +177,12 @@ function InterviewsPage() {
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-							<th
-								scope="row"
-								class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-							>
-								16-June, 2020
-							</th>
-							<td class="px-6 py-4font-medium text-gray-900 whitespace-nowrap dark:text-white">
-								10:00
-							</td>
-							<td class="px-6 py-4">Mohammed Riyas</td>
-							<td class="px-6 py-4">₹ 4999</td>
-							<td class="px-6 py-4 text-orange-400 font-bold">
-								Pending
-							</td>
-							<td class="px-6 py-4 text-pink-500 font-bold">
-								--
-							</td>
-							<td class="px-6 py-4 flex gap-6">
-								<div class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-									Join
-								</div>
-								<div class="font-medium text-red-600 hover:underline">
-									Cancel
-								</div>
-							</td>
-						</tr>
-						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-							<th
-								scope="row"
-								class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-							>
-								16-June, 2020
-							</th>
-							<td class="px-6 py-4font-medium text-gray-900 whitespace-nowrap dark:text-white">
-								10:00
-							</td>
-							<td class="px-6 py-4">Mohammed Riyas</td>
-							<td class="px-6 py-4">₹ 4999</td>
-							<td class="px-6 py-4 text-red-500 font-bold">
-								Cancelled
-							</td>
-							<td class="px-6 py-4 text-pink-500 font-bold">
-								--
-							</td>
-							<td class="px-6 py-4 flex gap-6">
-								<div class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-									--
-								</div>
-							</td>
-						</tr>
-						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-							<th
-								scope="row"
-								class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-							>
-								16-June, 2020
-							</th>
-							<td class="px-6 py-4font-medium text-gray-900 whitespace-nowrap dark:text-white">
-								10:00
-							</td>
-							<td class="px-6 py-4">Mohammed Rayan</td>
-							<td class="px-6 py-4">₹ 49</td>
-							<td class="px-6 py-4 text-green-500 font-bold">
-								Completed
-							</td>
-							<td class="px-6 py-4 text-pink-500 font-bold">
-								View
-							</td>
-							<td class="px-6 py-4">
-								<div class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-									--
-								</div>
-							</td>
-						</tr>
+						{
+							(meetings.length > 0) && meetings?.map(int => <InterviewsTable interview={int} /> )
+						}
+						{
+							meetings.length === 0 && <h1 className="text-center text-gray-400">No interviews scheduled yet</h1>
+						}
 					</tbody>
 				</table>
 			</div>

@@ -27,7 +27,7 @@ function OtherProfile() {
             <EducationCard education={profileDetails?.education} editAccess={false} />
             <ExperienceCard experience={profileDetails?.experience} editAccess={false} />
             <SkillsCard skills={profileDetails?.skills} editAccess={false} />
-            <SlotsPage />
+            <SlotsPage profileDetails={profileDetails} />
         </div>
     </div>
   )

@@ -1,7 +1,23 @@
 const Mentor = require("../models/mentorModel")
 const Mentee = require("../models/menteeModel");
+const Interview = require("../models/InterviewsModel");
 const Slot = require("../models/slotModel");
 const getDates = require('../momentHelpers');
+const mongoose = require('mongoose');
+
+//generate a meeting link
+function generateMeetingLink() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const linkLength = 8; // adjust the length of the link as needed
+  let meetingLink = '';
+  const timestamp = Date.now();
+
+  for (let i = 0; i < linkLength; i++) {
+    meetingLink += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return `meet-${timestamp}-${meetingLink}`;
+}
 
 //create  new user from kafka message
 const createProfile = async(messageData) => {
@@ -125,12 +141,71 @@ const getMentorSlotsByDateController = async(req, res, next) => {
         let filteredSlots = slots?.slots?.filter(slot => slot?.date?.toISOString().split('T')[0].includes(date.split('T')[0]))
         return res.status(200).json({success:true, message:null, data:{slots:filteredSlots}});
     } catch (error) {
-        console.log(error);
         next(error?.message)
     }
 }
 
+//know whether a status is booked or not
+const isSlotBookedController = async(req, res, next) =>{
+    try {
+        console.log("api call reached...", req.body.mentorID, req.body.slotID);
+        let slotStatus = await Mentor.findOne(
+            {
+                "userID": req.body.mentorID,
+                "slots": { $elemMatch: { _id: req.body.slotID } }
+            },
+            { "slots.$.isBooked": 1 }
+        )
+        return res.status(200).json({bookingStatus: slotStatus?.slots[0]?.isBooked});
+    } catch (error) {
+        console.log(error)
+    }
+}
 
+
+//add a new meeting between clients
+const addNewMeetingsController = async(req, res, next) => {
+    try {
+        console.log(req.body);
+        let { transactionID, mentorID, date, time, amount, slotID } = req.body;
+        let link = generateMeetingLink();
+        let newMeetingObject = new Interview({ transactionID, mentorID, date, time, amount, menteeID: req.user?.userID, link });
+        let newMeetingInsertedResp = await newMeetingObject.save();
+        const result = await Mentor.updateOne(
+            {
+                userID: mentorID,
+                "slots._id": slotID
+            },
+            {
+                $set: {
+                "slots.$.isBooked": true,
+                "slots.$.menteeID": req.user?.userID
+                }
+            }
+        );
+        console.log("new meeting response ::: ",newMeetingInsertedResp, result);
+    } catch (error) {
+        next(error.message);
+    }
+}
+
+//get all meetings for mentee
+const getAllMeetingsController = async(req, res, next) => {
+    try {
+        let role = req?.user?.role
+        if(role === "mentor"){
+            let meetings = await Interview.find({mentorID: req.user?.userID});
+            return res.status(200).json({success:true, message:null, data:{meetings}})
+        }else if(role === "mentee"){
+            let meetings = await Interview.find({menteeID: req.user?.userID});
+            return res.status(200).json({success:true, message:null, data:{meetings}})
+        }else{
+            next("Unable to find");
+        }
+    } catch (error) {
+        next(error.message);
+    }
+}
 
 
 
@@ -142,4 +217,7 @@ module.exports = {
     deleteAspecificSlotController,
     getMentorSlotsByDateController,
     addReccuringSlotsController,
+    addNewMeetingsController,
+    isSlotBookedController,
+    getAllMeetingsController,
 }

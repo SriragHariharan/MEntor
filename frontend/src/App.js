@@ -12,10 +12,6 @@ function App() {
 			<ToastContainer />
 			<div className={isDarkTheme && "dark"}>
 				<RouterProvider router={router} />
-				{/* <MentorNavbar />
-				<div class="pt-16 sm:ml-64">
-					<Notifications />
-				</div> */}
 			</div>
 		</GoogleOAuthProvider>
   );

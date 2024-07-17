@@ -5,28 +5,40 @@ const {
     getMySlotsByDateController, 
     deleteAspecificSlotController, 
     getMentorSlotsByDateController, 
-    addReccuringSlotsController
+    addReccuringSlotsController,
+    addNewMeetingsController,
+    isSlotBookedController,
+    getAllMeetingsController
 } = require('../controllers/interviewController');
 
 const router = require('express').Router();
 
 //add new slot
-router.post("/slot/add/single", authMiddleware, addNewSlotController)
+router.post("/slot/add/single", authMiddleware, addNewSlotController);
 
 //add new recurring slot
-router.post("/slot/add/reccuring", authMiddleware, addReccuringSlotsController)
+router.post("/slot/add/reccuring", authMiddleware, addReccuringSlotsController);
 
 
 //delete slot
-router.delete("/slot/:slotID/delete", authMiddleware, deleteAspecificSlotController)
+router.delete("/slot/:slotID/delete", authMiddleware, deleteAspecificSlotController);
 
 //get slots by date
-router.post("/slots", authMiddleware, getSlotsByDateController )
+router.post("/slots", authMiddleware, getSlotsByDateController );
 
 //get my slots by date
-router.post("/slots/me", authMiddleware, getMySlotsByDateController)
+router.post("/slots/me", authMiddleware, getMySlotsByDateController);
 
 //get slots of a specific mentor by date
-router.post("/slots/mentor/", authMiddleware, getMentorSlotsByDateController)
+router.post("/slots/mentor/", authMiddleware, getMentorSlotsByDateController);
+
+//get status of slot before booking
+router.post("/slots/status/", authMiddleware, isSlotBookedController);
+
+//add a new meeting
+router.post("/meetings/add", authMiddleware, addNewMeetingsController);
+
+//get meetings
+router.get("/meetings", authMiddleware, getAllMeetingsController);
 
 module.exports = router;
