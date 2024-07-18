@@ -100,7 +100,7 @@ function MentorsTable({users, type}) {
                                     }
                                 <tbody>
                                     {
-                                        users?.map(user => <UsersTableRow user={user} /> )
+                                        users?.map(user => <UsersTableRow user={user} type={type} /> )
                                     }
                                 </tbody>
                             </table>

@@ -1,5 +1,27 @@
-const { loginAdminController, getMentorMenteeCount, isAdminSessionController, getMentorsController, getMenteesController, getApprovalMentorsController, approveMentorController } = require('../controllers/adminAuthController');
-const { signupUserController, loginUserController, signupGoogleUserController, verifyOtpController, resendOtpController, signupGoogleUserWithRoleController, verifyEmailController, verifyOtpSendFromForgotPasswordController, resetPasswordController, signupMentorController } = require('../controllers/authController');
+const { 
+    loginAdminController,
+    getMentorMenteeCount,
+    getMentorsController,
+    getMenteesController,
+    getApprovalMentorsController,
+    approveMentorController,
+    blockMentorController, 
+    blockMenteeController
+} = require('../controllers/adminAuthController');
+
+const { 
+    signupUserController,
+    loginUserController,
+    signupGoogleUserController,
+    verifyOtpController,
+    resendOtpController,
+    signupGoogleUserWithRoleController,
+    verifyEmailController,
+    verifyOtpSendFromForgotPasswordController,
+    resetPasswordController,
+    signupMentorController 
+} = require('../controllers/authController');
+
 const adminAuthMiddleware = require('../helpers/adminAuthMiddleware');
 
 const router = require('express').Router();
@@ -55,9 +77,9 @@ router.get("/admin/mentees", adminAuthMiddleware, getMenteesController);
 router.post("/admin/mentor/approve", adminAuthMiddleware, approveMentorController);
 
 //block a mentor
-// router.post("/admin/mentor/block", adminAuthMiddleware, blockMentorController);
+router.post("/mentor/block", adminAuthMiddleware, blockMentorController);
 
 //block a mentee 
-// router.post("/admin/mentee/block", adminAuthMiddleware, blockMentorController);
+router.post("/mentee/block", adminAuthMiddleware, blockMenteeController);
 
 module.exports = router;

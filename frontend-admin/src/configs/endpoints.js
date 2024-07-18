@@ -11,7 +11,9 @@ const ENDPOINTS = {
     APPROVED_MENTORS:   USER_SERVICE_BASE_URL + "/admin/mentors",
     APPROVED_MENTEES:   USER_SERVICE_BASE_URL + "/admin/mentees",
     APPROVAL_PENDING_MENTORS: USER_SERVICE_BASE_URL + "/admin/mentors/approval",
-    APPROVE_MENTOR: USER_SERVICE_BASE_URL + "/admin/mentor/approve",
+    APPROVE_MENTOR:     USER_SERVICE_BASE_URL + "/admin/mentor/approve",
+    BLOCK_MENTOR:       USER_SERVICE_BASE_URL + "/mentor/block",
+    BLOCK_MENTEE:       USER_SERVICE_BASE_URL + "/mentee/block",
 //  UPDATE_USER: (userId) => `${BASE_URL}/users/${userId}`,
 };
 

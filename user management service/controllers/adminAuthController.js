@@ -23,7 +23,7 @@ const loginAdminController = async(req, res, next) => {
     }
 };
 
-const getMentorMenteeCount = async (req, res, next) => {
+const getMentorMenteeCount = async (_req, res, next) => {
     try {
         let mentorArray = await Mentor.find({});
         let menteeArray = await User.find({});
@@ -35,25 +35,25 @@ const getMentorMenteeCount = async (req, res, next) => {
 }
 
 
-const getMentorsController = async (req, res, next) => {
+const getMentorsController = async (_req, res, next) => {
     try {
         let mentors = await Mentor.find({accountVerified:true}, {password:0, role:0, profilePicture:0});
-        return res.status(200).json({ success: true, message:null, data:{ mentors}});
+        return res.status(200).json({ success: true, message:null, data:{ mentors, role: "mentor"}});
     } catch (error) {
         next(error.message);
     }
 }
 
-const getMenteesController = async (req, res, next) => {
+const getMenteesController = async (_req, res, next) => {
     try {
         let mentees = await User.find({}, {password:0, role:0, profilePicture:0});
-        return res.status(200).json({ success: true, message:null, data:{ mentees }});
+        return res.status(200).json({ success: true, message:null, data:{ mentees, role: "mentee"}});
     } catch (error) {
         next(error.message);
     }
 }
 
-const getApprovalMentorsController = async (req, res, next) => {
+const getApprovalMentorsController = async (_req, res, next) => {
     try {
         let mentors = await Mentor.find({accountVerified:false}, {password:0, role:0, profilePicture:0});
         return res.status(200).json({ success: true, message:null, data:{ mentors}});
@@ -79,11 +79,12 @@ const approveMentorController = async (req, res, next) => {
 const blockMentorController = async (req, res, next) => {
     try {
         const { userID } = req.body;
-        let updatedResp = await Mentor.updateOne({_id:userID},{$set:{accountBlocked:true}})
+        let updatedResp = await Mentor.updateOne({_id:userID},{$set:{accountBlocked:req.body.status}});
+        //console.log(req.body, updatedResp)
         if(updatedResp.modifiedCount !== 1){
             return next("Nothing to approve")
         }
-        return res.status(200).json({success:true, message:"Blocked successfully", data:null})
+        return res.status(200).json({success:true, message:null, data:null})
     } catch (error) {
         next(error.message);
     }
@@ -91,12 +92,14 @@ const blockMentorController = async (req, res, next) => {
 
 const blockMenteeController = async (req, res, next) => {
     try {
-        const { userID } = req.body;
-        let updatedResp = await Mentor.updateOne({_id:userID},{$set:{accountBlocked:true}})
+        console.log("Call reached here...")
+        const { userID, status } = req.body;
+        let updatedResp = await User.updateOne({_id:userID},{$set:{accountBlocked: status}});
+        console.log(req.body, updatedResp)
         if(updatedResp.modifiedCount !== 1){
-            return next("Nothing to approve")
+            return next("Nothing to approve");
         }
-        return res.status(200).json({success:true, message:"Blocked successfully", data:null})
+        return res.status(200).json({success:true, message:null, data:null})
     } catch (error) {
         next(error.message);
     }
