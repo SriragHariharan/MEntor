@@ -89,38 +89,30 @@ function MentorNavbar() {
 							<MdDashboardCustomize className="text-2xl" />
 							<span className="ms-3">Dashboard</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
-							<BsFilePost className="text-2xl" />
-							<span className="ms-3">Feed</span>
-						</div>
-						<Link to={"/mentee/mentors"} className="flex items-center p-2 text-green-500">
-							<FaPeopleGroup className="text-2xl" />
-							<span className="ms-3">Mentors</span>
-						</Link>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/mentees/"} className="flex items-center p-2 text-green-500">
 							<PiStudentBold className="text-2xl" />
 							<span className="ms-3">Mentees</span>
-						</div>
+						</Link>
 						<div className="flex items-center p-2 text-green-500">
 							<FaLaptopCode className="text-2xl" />
 							<span className="ms-3">Webinars</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/chats/"} className="flex items-center p-2 text-green-500">
 							<BsChatSquareText className="text-2xl" />
 							<span className="ms-3">Chats</span>
 							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
 								3
 							</span>
-						</div>
+						</Link>
 						<div className="flex items-center p-2 text-green-500">
 							<GiPublicSpeaker className="text-2xl" />
 							<span className="ms-3">Rooms</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/interviews/"} className="flex items-center p-2 text-green-500">
 							<MdWork className="text-2xl" />
-							<span className="ms-3">Interviews</span>
-						</div>
-						<Link to={"/mentee/slots/add"} className="flex items-center p-2 text-green-500">
+							<span className="ms-3">Meetings</span>
+						</Link>
+						<Link to={"/mentor/slots/"} className="flex items-center p-2 text-green-500">
 							<FaCheckToSlot className="text-2xl" />
 							<span className="ms-3">Slots</span>
 						</Link>
@@ -128,13 +120,13 @@ function MentorNavbar() {
 							<TbPigMoney className="text-2xl" />
 							<span className="ms-3">Revenue</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/notifications/"} className="flex items-center p-2 text-green-500">
 							<AiOutlineBell className="text-2xl" />
 							<span className="ms-3">Notifications</span>
 							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
 								3
 							</span>
-						</div>
+						</Link>
 						<Link to={"/mentee/profile"} className="flex items-center p-2 text-green-500">
 							<FaGear className="text-2xl" />
 							<span className="ms-3">Profile</span>

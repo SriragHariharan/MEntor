@@ -46,9 +46,26 @@ const followMentorController = async (req, res, next) => {
     }
 }
 
+//mentor get all mentee details
+const getAllMenteesController = async(req, res, next) => {
+    try {
+        let {followers} = await Profile.findOne({userID: req.user.userID}, {_id:0, followers:1});
+        let followerDetails = [];
+            for (let i = 0; i < followers.length; i++) {
+                let profile = await Profile.findOne({userID: followers[i]}, {_id:0, username:1, profilePic:1, userID:1, jobDescription:1, bio:1});
+                followerDetails.push(profile);
+            }
+            (followerDetails);
+            return res.status(200).json({success: true, message:null, data:{followers: followerDetails}})
+    } catch (error) {
+        next(error.message);
+    }
+} 
+
 
 module.exports = {
     allMentorsController,
     getUserDetailsController,
     followMentorController,
+    getAllMenteesController,
 };

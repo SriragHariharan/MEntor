@@ -25,7 +25,7 @@ function MentorCard({details}) {
                 <img className="object-cover object-center h-32" src={profilePic?.secure_url ?? DEFAULT_USER_IMG} alt={`${username} profilepic`} />
             </div>
             <div className="text-center mt-2">
-                <Link to={"/mentee/" + userID + "/profile"} className="h2 font-semibold dark:text-slate-300">{username}</Link>
+                <Link to={"/" + userID + "/profile"} className="h2 font-semibold dark:text-slate-300">{username}</Link>
                 <p className="text-gray-500">{jobDescription ? jobDescription : null}</p>
             </div>
             <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
@@ -51,8 +51,7 @@ function MentorCard({details}) {
                     <div className='dark:text-blue-300'>{careerGuidanceCount}</div>
                 </li>
             </ul>
-				<div className="p-4 border-t mx-8 mt-2 flex">
-					<button className=" block mx-auto rounded-full bg-gray-900 dark:bg-gray-600 hover:shadow-lg font-semibold text-white px-6 py-2"><IoChatbubbleEllipses /></button>
+				<div className="p-4 border-t mx-8 mt-2">
 					<button onClick={handleFollow} className=" block mx-auto rounded-full bg-gray-900 dark:bg-gray-600 hover:shadow-lg font-semibold text-white px-6 py-2"><SlUserFollow /></button>
 				</div>
         </div>

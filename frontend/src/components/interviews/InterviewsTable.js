@@ -11,7 +11,7 @@ function InterviewsTable({ interview }) {
                 <td class="px-6 py-4font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {interview?.time}
                 </td>
-                <Link to={`/mentee/${interview?.mentorID}/profile`} class="px-6 py-4 text-blue-500">View Profile</Link>
+                <Link to={`/${interview?.mentorID}/profile`} class="px-6 py-4 text-blue-500">View Profile</Link>
                 <td class="px-6 py-4">$ {interview?.amount}</td>
                 <td class="px-6 py-4 text-dark font-bold">
                     {interview?.status}

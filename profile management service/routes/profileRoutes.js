@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const authMiddleware = require("../authMiddleware");
-const { allMentorsController, getUserDetailsController, followMentorController } = require("../controllers/mentorsController");
+const { allMentorsController, getUserDetailsController, followMentorController, getAllMenteesController } = require("../controllers/mentorsController");
 const { 
     MyProfileDetailsController,
     addEducationController,
@@ -48,5 +48,9 @@ router.post("/users/follow", authMiddleware, followMentorController)
 
 //get following mentors list
 router.get("/following", authMiddleware, followingMentorsContoller)
+
+
+//get following mentors list
+router.get("/followers", authMiddleware, getAllMenteesController)
 
 module.exports = router;

@@ -15,7 +15,7 @@ function OtherProfile() {
     if(error) return <h1>{error}</h1>
 
   return (
-    <div>
+    <div className='w-2/3 mx-auto'>
         <ProfileDetailsCard 
             profileDetails={profileDetails}
             followersCount={profileDetails?.followers?.length} 

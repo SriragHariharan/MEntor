@@ -34,6 +34,8 @@ import MentorProtectedRoutes from "../layouts/MentorProtectedRoutes";
 import MentorSignup from "../pages/authentication/MentorSignup";
 import MentorApprovalPage from "../pages/MentorApprovalPage";
 import UserBlocked from "../pages/UserBlocked";
+import NotFound404 from "../pages/NotFound404";
+import Followers from "../pages/Followers";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -60,7 +62,7 @@ function useRoutes() {
 		createRoutesFromElements(
 			<>
 				<Route path="/" element={<LandingPage />} />
-
+				<Route path="/:id/profile" element={<OtherProfile />} />
 				{/* mentee routes */}
 				{/* <Route path="/user" element={<MenteeRootLayout />}> */}
                     <Route path='/auth' element={<AuthRoutes user={USER?.token} role={USER?.role} />}>
@@ -84,21 +86,20 @@ function useRoutes() {
 					<Route path="/mentee/mentors" element={<Mentors />} />
 					<Route path="/mentee/notifications" element={<Notifications />} />
 					<Route path="/mentee/interviews" element={<InterviewsPage />} />
-					<Route path="/mentee/:id/profile" element={<OtherProfile />} />
 					<Route path="/mentee/chats" element={<Chats />} />
 				</Route>
                 
 				{/* mentor routes */}
 				<Route path='/mentor' element={<MentorProtectedRoutes user={USER?.token} role={USER?.role}  />}>
 					<Route path="/mentor/profile" element={<ProfilePage />} />
-					<Route path="/mentor/mentors" element={<Mentors />} />
 					<Route path="/mentor/notifications" element={<Notifications />} />
 					<Route path="/mentor/interviews" element={<InterviewsPage />} />
-					<Route path="/mentor/:id/profile" element={<OtherProfile />} />
-					<Route path="/mentor/slots/add" element={<AddSlotsPage />} />
+					<Route path="/mentor/slots/" element={<AddSlotsPage />} />
 					<Route path="/mentor/chats" element={<Chats />} />
+					<Route path="/mentor/mentees" element={<Followers />} />
 				</Route>
 
+				<Route path="*" element={<NotFound404 />} />
 			</>
 		)
 	);
