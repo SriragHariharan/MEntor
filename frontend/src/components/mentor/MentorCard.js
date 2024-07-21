@@ -1,18 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { DEFAULT_COVER_IMG, DEFAULT_USER_IMG } from '../../helpers/CONSTANTS'
 import { Link } from 'react-router-dom';
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { SlUserFollow } from "react-icons/sl";
 import { axiosInstance } from '../../helpers/axios';
+import { useSelector } from 'react-redux';
 
 
 function MentorCard({details}) {
+    //get loggedin user id 
+    const myID = useSelector(store => store?.profile?.user?.userID);
+
+    const [isFollowing, setIsFollowing] = useState(details?.followers.includes(myID));
+
+    
     const {userID, username, jobDescription, profilePic, coverPic, followers, careerGuidanceCount, interviewsCount} = details;
+    console.log("if ::: ",followers, myID, followers.includes(myID))
 
     //follow a mentor
     const handleFollow = () => {
         axiosInstance.post(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/users/follow", {mentorID: userID})
-        .then(resp => console.log(resp.data))
+        .then(resp => setIsFollowing(true))
         .catch(err => console.log(err.message))
     }
 
@@ -52,7 +60,11 @@ function MentorCard({details}) {
                 </li>
             </ul>
 				<div className="p-4 border-t mx-8 mt-2">
-					<button onClick={handleFollow} className=" block mx-auto rounded-full bg-gray-900 dark:bg-gray-600 hover:shadow-lg font-semibold text-white px-6 py-2"><SlUserFollow /></button>
+                    {
+                        isFollowing ? <small className='block mx-auto text-center text-gray-400'>You are following</small>
+                        : <button onClick={handleFollow} className=" block mx-auto rounded-full bg-gray-900 dark:bg-gray-600 hover:shadow-lg font-semibold text-white px-6 py-2"><SlUserFollow /></button> 
+                    }
+					
 				</div>
         </div>
   )

@@ -18,8 +18,7 @@ function Mentors() {
 		console.log(searchQuery, result);
 		setMentorResult(result);
 	}
-	console.log("MR[0]",mentorsResult[0])
-
+	
 	//sorting a mentor(redesing from db)
 	const sortMentor = (type) => {
 		let sortedMentors;

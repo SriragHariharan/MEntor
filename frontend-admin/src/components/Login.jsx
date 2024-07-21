@@ -39,13 +39,13 @@ function Login() {
                     <form class="space-y-4 md:space-y-6"  onSubmit={handleSubmit(onSubmit)}>
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                            <input {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i })} type="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required="" />
+                            <input value={"admin@mentor.app"} {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i })} type="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required="" />
                             {errors.email?.type === "required" && (<small style={{ color: "red" }}>email required</small>)}
                             {errors.email?.type === "pattern" && (<small style={{ color: "red" }}>Please check your email</small>)}
                         </div>
                         <div>
                             <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input {...register("password", {required: true, minLength: 6})} type="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required="" />
+                            <input value={"admin@mentor.app"} {...register("password", {required: true, minLength: 6})} type="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required="" />
                             {errors.password?.type === "required" && (<small style={{ color: "red" }}>Password required</small>)}
 							{errors.password?.type === "minLength" && (<small style={{ color: "red" }}>Password should me 6 or more characters</small>)}
                         </div>

@@ -9,7 +9,7 @@ function ChatUserHeader({ selectedChat }) {
         <div class="py-2 px-3 dark:bg-gray-700 flex flex-row justify-between items-center">
             <div class="flex items-center">
                 <div>
-                    <img class="w-10 h-10 rounded-full" src={profilePic ?? DEFAULT_USER_IMG}/>
+                    <img class="w-10 h-10 rounded-full object-cover" src={profilePic?.secure_url ?? DEFAULT_USER_IMG}/>
                 </div>
                 <div class="ml-4">
                     <p class="text-grey-darkest">

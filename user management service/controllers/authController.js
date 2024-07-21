@@ -79,7 +79,7 @@ const loginUserController =  async (req, res, next) => {
 		const existingUser = await User.findOne({email: req.body.email, loginType: "local"});
 		const existingMentor = await Mentor.findOne({email: req.body.email, loginType: "local"});
 		//blocked response
-		console.log(existingUser?.accountBlocked, existingMentor?.accountBlocked)
+		//console.log(existingUser?.accountBlocked, existingMentor?.accountBlocked)
 		if(existingUser?.accountBlocked === true || existingMentor?.accountBlocked === true) {
 			return next({ status:403, message: "User blocked access"})
 		}

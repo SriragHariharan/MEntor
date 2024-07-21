@@ -15,10 +15,13 @@ import {
     setFollowers,
     addExperienceAction,
 } from '../redux toolkit/profileSlice'
+import { showErrorToast } from '../helpers/ToastMessageHelpers'
+import ProfilePageShimmer from './shimmers/ProfilePageShimmer'
 
 function ProfilePage() {
   const[profileDetails, setProfileDetails] = useState(null);
   const[editAccess,setEditAccess] = useState(false);
+  const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
   //collect data and store to redux toolkit
@@ -37,7 +40,10 @@ function ProfilePage() {
       dispatch(updateCoverPic(resp.data?.profileDetails?.coverPic?.secure_url))
       dispatch(setFollowers(resp.data?.profileDetails?.followers))
     })
-    .catch(err => console.log(err.message))
+    .catch(err => {
+      showErrorToast(err.message);
+      setError(error)
+    })
   }, [])
 
   //read data from reduxtk and send to components
@@ -51,7 +57,7 @@ function ProfilePage() {
 
 
   if(profileDetails === false) return <h1 className="text-6xl text-center text-gray-500">Loading....</h1>
-  if(profileDetails === null) return <h1 className="text-center text-6xl text-gray-500">Oops, Something went wrong...!</h1>
+  if(profileDetails === null) return <ProfilePageShimmer />
   return (
         <div className="">
             <ProfileDetailsCard 

@@ -353,7 +353,7 @@ function ProfileDetailsCard({profileDetails,followersCount,profilePic, coverPic,
 						</div>
 						<div class="p-4 md:p-5 text-center">
 							<img src={profileImageLink} alt="select profile img" className='w-48 h-48 rounded-full object-contain' />
-							<input onChange={handleProfileChange} class="block w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="large_size" type="file"></input>
+							<input onChange={handleProfileChange} class="block w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="large_size" type="file" accept="image/jpeg, image/png"></input>
 							{/* image upload button */}
 							{
 								isImageUploading ? (
@@ -393,7 +393,7 @@ function ProfileDetailsCard({profileDetails,followersCount,profilePic, coverPic,
 						</div>
 						<div class="p-4 md:p-5 text-center">
 							<img src={coverImageLink} alt="select profile img" className='w-full h-24 object-contain' />
-							<input onChange={handleCoverChange} class="block w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="large_size" type="file"></input>
+							<input onChange={handleCoverChange} class="block w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="large_size" type="file" accept="image/jpeg, image/png"></input>
 							{/* image upload button */}
 							{
 								isImageUploading ? (

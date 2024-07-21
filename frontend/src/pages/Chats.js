@@ -59,7 +59,7 @@ function Chats() {
         if (!listenersSet.current) {
             // Listen for messages in the room
             socket.on('message', (message) => {
-                setMessages((prevMessages) => [...prevMessages, message]);
+                setMessages((prevMessages) => [...prevMessages, { ...message, isRead: true }]);
             });
 
             // Set the flag to true to prevent adding listeners again

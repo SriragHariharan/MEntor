@@ -30,7 +30,7 @@ function Login() {
 				dispatch(loginUserAction(resp.data))
 				navigate(`/${resp?.data?.data?.role}/profile`)	
 			})
-			.catch((err) => showErrorToast(err))
+			.catch((err) => console.log(err))
 	};
 
 //google login logic
