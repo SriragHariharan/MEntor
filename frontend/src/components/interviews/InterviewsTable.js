@@ -20,9 +20,9 @@ function InterviewsTable({ interview }) {
                     {interview?.feedback ?? "--"}
                 </td>
                 <td class="px-6 py-4 flex gap-6">
-                    <div class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <Link to={"/mentee/interview/" + interview?.link} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                         Join
-                    </div>
+                    </Link>
                     {/* <div class="font-medium text-red-600 hover:underline">
                         Cancel
                     </div> */}

@@ -1,10 +1,11 @@
 import React from 'react'
 import useGetMeetings from '../hooks/useGetMeetings';
 import InterviewsTable from '../components/interviews/InterviewsTable';
+import MentorInterviewsTable from '../components/interviews/MentorInterviewsTable';
 
 
 function InterviewsPage() {
-	const {meetings, error} = useGetMeetings();
+	const {meetings, error, role} = useGetMeetings();
 
   return (
 		<div className="py-10 dark:bg-gray-800 h-screen px-4 lg:px-12">
@@ -160,7 +161,7 @@ function InterviewsPage() {
 								Time
 							</th>
 							<th scope="col" class="px-6 py-3">
-								Mentor name
+								Participant
 							</th>
 							<th scope="col" class="px-6 py-3">
 								Price( $ )
@@ -178,7 +179,10 @@ function InterviewsPage() {
 					</thead>
 					<tbody>
 						{
-							(meetings.length > 0) && meetings?.map(int => <InterviewsTable interview={int} /> )
+							(role== "mentee" && meetings.length > 0) && meetings?.map(int => <InterviewsTable interview={int} /> )
+						}
+						{
+							(role== "mentor" && meetings.length > 0) && meetings?.map(int => <MentorInterviewsTable interview={int} /> )
 						}
 						{
 							meetings.length === 0 && <h1 className="text-center text-gray-400">No interviews scheduled yet</h1>

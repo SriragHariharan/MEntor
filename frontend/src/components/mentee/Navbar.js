@@ -32,49 +32,7 @@ function Navbar() {
 
   return (
 		<div className="">
-			<nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-				<div className="px-3 py-3 lg:px-5 lg:pl-3">
-					<div className="flex items-center justify-between">
-						<div className="flex items-center justify-start rtl:justify-end">
-							<button
-								data-drawer-target="separator-sidebar"
-								data-drawer-toggle="separator-sidebar"
-								aria-controls="separator-sidebar"
-								type="button"
-								className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-							>
-								<span className="sr-only">Open sidebar</span>
-								<i className="fa-solid fa-bars"></i>
-							</button>
-							<div className="flex ms-2 md:me-24">
-								<img
-									src={logo}
-									className="h-12 me-3"
-									alt="MEntor Logo"
-								/>
-							</div>
-						</div>
-						<div className="flex items-center">
-							<div className="flex items-center ms-3">
-								<div className="flex items-center gap-4">
-									{/* dark light toggle */}
-									{isDarkTheme ? (
-										<IoMdSunny onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-8 h-8 text-yellow-300" />
-									) : (
-										<MdDarkMode  onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-8 h-8 text-gray-500" />
-									)}
-
-									<img
-										className="w-10 h-10 rounded-full object-cover cursor-pointer"
-										src={profilePic ?? DEFAULT_USER_IMG}
-										alt="user photo"
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</nav>
+			{/* place below navbar code here */}
 
 			<aside
 				id="separator-sidebar"
@@ -82,7 +40,11 @@ function Navbar() {
 				aria-label="Sidebar"
 			>
 				<div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-					<div className="space-y-2 font-medium  mt-16">
+					<div>
+						<img src={logo} className="h-12 me-3" alt="MEntor Logo" />
+					</div>
+					<hr />
+					<div className="space-y-2 font-medium  mt-4">
 						<div className="flex items-center p-2 text-green-500">
 							<MdDashboardCustomize className="text-2xl" />
 							<span className="ms-3">Dashboard</span>
@@ -138,6 +100,10 @@ function Navbar() {
 							</span>
 						</Link>
 					</div>
+					
+					<div className="flex items-center gap-4">
+						<img className="w-10 h-10 rounded-full object-cover cursor-pointer" src={profilePic ?? DEFAULT_USER_IMG} alt="user photo" />
+					</div>
 					<div className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
 						<div className="flex items-center p-2 text-gray-500">
 							<IoIosHelpCircleOutline className="text-2xl" />
@@ -147,6 +113,15 @@ function Navbar() {
 							<AiOutlineLogout className="text-2xl" />
 							<span className="ms-3">Logout</span>
 						</div>
+						<div className="flex items-center p-2">
+							{isDarkTheme ? (
+								<IoMdSunny onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-6 h-6 text-yellow-300" />
+								) : (
+								<MdDarkMode  onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-6 h-6 text-gray-500" />
+							)}
+							<span className="ms-3">Theme</span>
+
+						</div>
 					</div>
 				</div>
 			</aside>
@@ -154,4 +129,36 @@ function Navbar() {
   );
 }
 
-export default Navbar
+export default Navbar;
+
+
+/**
+ * <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+				<div className="px-3 py-3 lg:px-5 lg:pl-3">
+					<div className="flex items-center justify-between">
+						<div className="flex items-center justify-start rtl:justify-end">
+							<button
+								data-drawer-target="separator-sidebar"
+								data-drawer-toggle="separator-sidebar"
+								aria-controls="separator-sidebar"
+								type="button"
+								className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+							>
+								<span className="sr-only">Open sidebar</span>
+								<i className="fa-solid fa-bars"></i>
+							</button>
+							
+						</div>
+						<div className="flex items-center">
+							<div className="flex items-center ms-3">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+ * 
+ * 
+ * 
+ * 
+ */

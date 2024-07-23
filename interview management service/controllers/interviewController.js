@@ -195,10 +195,10 @@ const getAllMeetingsController = async(req, res, next) => {
         let role = req?.user?.role
         if(role === "mentor"){
             let meetings = await Interview.find({mentorID: req.user?.userID});
-            return res.status(200).json({success:true, message:null, data:{meetings}})
+            return res.status(200).json({success:true, message:null, data:{meetings, role}})
         }else if(role === "mentee"){
             let meetings = await Interview.find({menteeID: req.user?.userID});
-            return res.status(200).json({success:true, message:null, data:{meetings}})
+            return res.status(200).json({success:true, message:null, data:{meetings, role}})
         }else{
             next("Unable to find");
         }
