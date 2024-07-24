@@ -38,7 +38,7 @@ function InterviewsTable({ interview }) {
             </td>
             <td class="px-6 py-4 flex gap-6">
                 {
-                    !interview?.feedback && (
+                    interview?.status === "not completed" && (
                         <Link to={"/mentee/interview/" + interview?.link} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                             Join
                         </Link>

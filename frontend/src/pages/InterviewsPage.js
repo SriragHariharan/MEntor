@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useGetMeetings from '../hooks/useGetMeetings';
 import InterviewsTable from '../components/interviews/InterviewsTable';
 import MentorInterviewsTable from '../components/interviews/MentorInterviewsTable';
@@ -6,6 +6,24 @@ import MentorInterviewsTable from '../components/interviews/MentorInterviewsTabl
 
 function InterviewsPage() {
 	const {meetings, error, role} = useGetMeetings();
+	const [sortedMeetings, setSortedMeetings] = useState(meetings);
+
+	useEffect(() =>{
+		setSortedMeetings(meetings)
+	},[meetings])
+
+	//sorting code
+	const sortMeetings = (option) => {
+		if(option === "completed"){
+			let sortedResult = meetings.filter(meetings => meetings?.status === "completed")
+			setSortedMeetings(sortedResult);
+		}else if(option ==="not completed"){
+			let sortedResult = meetings.filter(meetings => meetings?.status === "not completed")
+			setSortedMeetings(sortedResult);
+		}else{
+			setSortedMeetings(meetings);
+		}
+	}
 
   return (
 		<div className="py-10 dark:bg-gray-800 h-screen px-4 lg:px-12">
@@ -51,8 +69,6 @@ function InterviewsPage() {
 						<div
 							id="dropdownRadio"
 							class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute inset-0 translate-x-[522.5px] translate-y-[3847.5px]"
-							data-popper-reference-hidden=""
-							data-popper-escaped=""
 							data-popper-placement="top"
 						>
 							<ul
@@ -62,6 +78,7 @@ function InterviewsPage() {
 								<li>
 									<div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
 										<input
+											onClick={() => sortMeetings("all")}
 											id="filter-radio-example-1"
 											type="radio"
 											value=""
@@ -76,24 +93,22 @@ function InterviewsPage() {
 								<li>
 									<div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
 										<input
-											checked=""
+											onClick={() => sortMeetings("not completed")}
 											id="filter-radio-example-2"
 											type="radio"
 											value=""
 											name="filter-radio"
 											class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
 										/>
-										<label
-											for="filter-radio-example-2"
-											class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-										>
-											Pending
+										<label class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
+											Not completed
 										</label>
 									</div>
 								</li>
 								<li>
 									<div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
 										<input
+											onClick={() => sortMeetings("completed")}
 											id="filter-radio-example-3"
 											type="radio"
 											value=""
@@ -105,24 +120,10 @@ function InterviewsPage() {
 										</label>
 									</div>
 								</li>
-								<li>
-									<div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-										<input
-											id="filter-radio-example-4"
-											type="radio"
-											value=""
-											name="filter-radio"
-											class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-										/>
-										<label class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
-											Cancelled
-										</label>
-									</div>
-								</li>
 							</ul>
 						</div>
 					</div>
-					<label for="table-search" class="sr-only">
+					{/* <label for="table-search" class="sr-only">
 						Search
 					</label>
 					<div class="relative">
@@ -147,7 +148,7 @@ function InterviewsPage() {
 							class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Search for items"
 						/>
-					</div>
+					</div> */}
 				</div>
 
 
@@ -179,10 +180,10 @@ function InterviewsPage() {
 					</thead>
 					<tbody>
 						{
-							(role== "mentee" && meetings.length > 0) && meetings?.map(int => <InterviewsTable interview={int} /> )
+							(role== "mentee" && meetings.length > 0) && sortedMeetings?.map(int => <InterviewsTable interview={int} /> )
 						}
 						{
-							(role== "mentor" && meetings.length > 0) && meetings?.map(int => <MentorInterviewsTable interview={int} /> )
+							(role== "mentor" && meetings.length > 0) && sortedMeetings?.map(int => <MentorInterviewsTable interview={int} /> )
 						}
 						{
 							meetings.length === 0 && <h1 className="text-center text-gray-400">No interviews scheduled yet</h1>
