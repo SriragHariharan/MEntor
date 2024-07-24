@@ -2,20 +2,38 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { axiosInstance } from '../../helpers/axios';
+import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
 
 function MentorInterviewsTable({ interview }) {
 
     const { register, handleSubmit, errors } = useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [interviewStatus, setInterviewStatus] = useState(interview?.status);
 
     const handleToggleModal = () => {
         setIsModalOpen(!isModalOpen);
     };
 
     const onSubmit = (data) => {
-    console.log(data);
-        
+        console.log(data);
+        axiosInstance.post(process.env.REACT_APP_INTERVIEW_SVC_ENDPOINT + "/meetings/feedback", { interviewID: interview?._id, ...data } )
+        .then(resp => {
+            showSuccessToast(resp.data.message)
+            setIsModalOpen(false);
+        })
+        .catch(error => showErrorToast(error?.response?.data.message))
     };
+
+    const handleMarkAsCompleted = () => {
+        alert("Are you sure you want to mark as completed?");
+        axiosInstance.post(process.env.REACT_APP_INTERVIEW_SVC_ENDPOINT + "/meetings/complete", { interviewID: interview?._id  } )
+        .then(resp => {
+            showSuccessToast(resp.data.message)
+            setInterviewStatus("completed");
+        })
+        .catch(error => showErrorToast(error?.response?.data.message))
+    }
 
   return (
         <>
@@ -29,19 +47,34 @@ function MentorInterviewsTable({ interview }) {
                 <Link to={`/${interview?.menteeID}/profile`} className="px-6 py-4 text-blue-500">View Profile</Link>
                 <td className="px-6 py-4">$ {interview?.amount}</td>
                 <td className="px-6 py-4 text-dark font-bold">
-                    {interview?.status}
+                    {interviewStatus}
                 </td>
                 <td className="px-6 py-4 text-pink-500 font-bold">
-                    {interview?.feedback ?? "--"}
+                    {interview?.feedback ? "Added" : "--"}
                 </td>
                 <td className="px-6 py-4 flex gap-6">
-                    <Link to={"/mentee/interview/" + interview?.link} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                        Join
-                    </Link>
-                    <div onClick={handleToggleModal} className="font-medium text-red-600 hover:underline cursor-pointer">
-                        Feedback
-                    </div>
-                </td>
+                    {
+                        interviewStatus !== "completed" && (
+                            <Link to={"/mentor/interview/" + interview?.link} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                Join
+                            </Link>
+                        )
+                    }
+                    {
+                        interviewStatus === "completed" && (
+                            <div onClick={handleToggleModal} className="font-medium text-red-600 hover:underline cursor-pointer">
+                                Feedback
+                            </div>
+                        )
+                    }
+                    {
+                        interviewStatus !== "completed" && (
+                            <div onClick={handleMarkAsCompleted} className="font-medium text-green-600 hover:underline cursor-pointer">
+                                Completed
+                            </div>
+                        )
+                    }
+                </td>                   
             </tr>
             
             {isModalOpen && (
@@ -57,10 +90,12 @@ function MentorInterviewsTable({ interview }) {
                         </div>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">                                >
+                                <label className="block text-sm font-medium text-gray-700">       
                                     Marks (out of 10)
                                 </label>
-                                <input type="number" 
+                                <input 
+                                    type="number" 
+                                    placeholder={interview?.marks}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     {...register('marks', { required: true, min: 0, max: 10 })}
                                 />
@@ -72,6 +107,7 @@ function MentorInterviewsTable({ interview }) {
                                 </label>
                                 <textarea
                                     id="feedback"
+                                    placeholder={interview?.feedback}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     {...register('feedback', { required: true })}
                                 />

@@ -207,6 +207,47 @@ const getAllMeetingsController = async(req, res, next) => {
     }
 }
 
+//mark interaction as completed
+const interviewMarkAsCompletedController = async (req, res, next) => {
+    try {
+        if(req.user.role !== "mentor"){
+            return next("Unauthorized Request");
+        }
+        let updatedResponse = await Interview.updateOne({_id:req.body.interviewID, mentorID:req.user.userID},{$set:{status: "completed"}});
+        if(updatedResponse?.modifiedCount === 1){
+            return res.status(201).json({success: true, message: "Interview marked as completed", data:null});
+        }
+    } catch (error) {
+        next(error.message);
+    }
+}
+
+//add feedback to the specific interview
+const addInterviewFeedbackController = async(req, res, next) => {
+    try {
+        if(req.user.role !== "mentor"){
+            return next("Unauthorized Request");
+        }
+        const { marks, feedback } = req.body;
+        let updatedResponse = await Interview.updateOne({_id:req.body.interviewID, mentorID:req.user.userID},{$set:{ marks, feedback }});
+        if(updatedResponse?.modifiedCount === 1){
+            return res.status(201).json({success: true, message: "Interview feedback added", data:null});
+        }
+    } catch (error) {
+        next(error.message);
+    }
+}
+
+//get feedback for specific interview
+const getInterviewFeedbackController = async(req, res, next) => {
+    try {
+        let feedback = await Interview.findOne({_id:req.params.interviewID}, {_id:0, marks:1, feedback: 1})
+        return res.status(200).json({success: true, message:null, data:feedback});
+    } catch (error) {
+        next(error.message);
+    }
+}
+
 
 
 module.exports = {
@@ -220,4 +261,8 @@ module.exports = {
     addNewMeetingsController,
     isSlotBookedController,
     getAllMeetingsController,
+    interviewMarkAsCompletedController,
+    addInterviewFeedbackController,
+    getInterviewFeedbackController,
+
 }

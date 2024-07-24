@@ -8,7 +8,10 @@ const {
     addReccuringSlotsController,
     addNewMeetingsController,
     isSlotBookedController,
-    getAllMeetingsController
+    getAllMeetingsController,
+    interviewMarkAsCompletedController,
+    addInterviewFeedbackController,
+    getInterviewFeedbackController
 } = require('../controllers/interviewController');
 
 const router = require('express').Router();
@@ -40,5 +43,16 @@ router.post("/meetings/add", authMiddleware, addNewMeetingsController);
 
 //get meetings
 router.get("/meetings", authMiddleware, getAllMeetingsController);
+
+//interview mark as completed 
+router.post("/meetings/complete", authMiddleware, interviewMarkAsCompletedController);
+
+//add feedback for the completed meetings
+router.post("/meetings/feedback", authMiddleware, addInterviewFeedbackController);
+
+//get feedback for the completed meetings
+router.get("/meetings/:interviewID/feedback", authMiddleware, getInterviewFeedbackController);
+
+getInterviewFeedbackController
 
 module.exports = router;

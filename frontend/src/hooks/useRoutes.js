@@ -37,6 +37,7 @@ import UserBlocked from "../pages/UserBlocked";
 import NotFound404 from "../pages/NotFound404";
 import Followers from "../pages/Followers";
 import MenteeMeetingPage from "../pages/MenteeMeetingPage";
+import MentorMeetingPage from "../pages/MentorMeetingPage";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -99,7 +100,7 @@ function useRoutes() {
 					<Route path="/mentor/slots/" element={<AddSlotsPage />} />
 					<Route path="/mentor/chats" element={<Chats />} />
 					<Route path="/mentor/mentees" element={<Followers />} />
-					<Route path="/mentor/interview/:meetingID" element={<MenteeMeetingPage />} />
+					<Route path="/mentor/interview/:meetingID" element={<MentorMeetingPage />} />
 				</Route>
 
 				<Route path="*" element={<NotFound404 />} />
