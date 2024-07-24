@@ -38,6 +38,7 @@ import NotFound404 from "../pages/NotFound404";
 import Followers from "../pages/Followers";
 import MenteeMeetingPage from "../pages/MenteeMeetingPage";
 import MentorMeetingPage from "../pages/MentorMeetingPage";
+import Webinars from "../pages/Webinars";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -90,6 +91,7 @@ function useRoutes() {
 					<Route path="/mentee/interviews" element={<InterviewsPage />} />
 					<Route path="/mentee/chats" element={<Chats />} />
 					<Route path="/mentee/interview/:meetingID" element={<MenteeMeetingPage />} />
+					<Route path="/mentee/webinars" element={<Webinars />} />
 				</Route>
                 
 				{/* mentor routes */}
