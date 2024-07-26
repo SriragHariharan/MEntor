@@ -93,10 +93,10 @@ function MentorNavbar() {
 							<PiStudentBold className="text-2xl" />
 							<span className="ms-3">Mentees</span>
 						</Link>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/webinars/"} className="flex items-center p-2 text-green-500">
 							<FaLaptopCode className="text-2xl" />
 							<span className="ms-3">Webinars</span>
-						</div>
+						</Link>
 						<Link to={"/mentor/chats/"} className="flex items-center p-2 text-green-500">
 							<BsChatSquareText className="text-2xl" />
 							<span className="ms-3">Chats</span>

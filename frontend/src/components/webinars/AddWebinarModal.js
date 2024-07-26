@@ -1,15 +1,34 @@
 import React from 'react'
  import { useForm } from 'react-hook-form';
+import { axiosInstance } from '../../helpers/axios';
  
  function AddWebinarModal({ handleToggleModal }) {
     const { register, handleSubmit, errors } = useForm();
-    const onSubmit = (data) => {
-        console.log(data);
-    }
-
     const closeModal = () => {
         handleToggleModal(false);
     }
+
+    const onSubmit = (data) => {
+        const formData = new FormData();
+        // Append form data
+        Object.keys(data).forEach((key) => {
+        formData.append(key, data[key]);
+        });
+
+        // If you have a file input
+        formData.append('file', data.banner[0]);
+        
+        axiosInstance.post(process.env.REACT_APP_WEBINAR_SVC_ENDPOINT + "/webinar/add", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+        .then(resp => console.log(resp?.data))
+        .catch(err => console.log(err?.response?.data?.message))
+    }
+
+
+
 
   return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">

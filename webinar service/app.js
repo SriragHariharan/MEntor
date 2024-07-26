@@ -3,12 +3,14 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const mongoose = require("mongoose");
+const fileUpload = require('express-fileupload');
 const app = express();
 require("./kafka/consumer")
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(fileUpload());
 
 //cors
 app.use(cors({

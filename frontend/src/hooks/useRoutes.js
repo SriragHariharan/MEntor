@@ -91,7 +91,7 @@ function useRoutes() {
 					<Route path="/mentee/interviews" element={<InterviewsPage />} />
 					<Route path="/mentee/chats" element={<Chats />} />
 					<Route path="/mentee/interview/:meetingID" element={<MenteeMeetingPage />} />
-					<Route path="/mentee/webinars" element={<Webinars />} />
+					<Route path="/mentee/webinars" element={<Webinars webinar={false} />} />
 				</Route>
                 
 				{/* mentor routes */}
@@ -103,6 +103,7 @@ function useRoutes() {
 					<Route path="/mentor/chats" element={<Chats />} />
 					<Route path="/mentor/mentees" element={<Followers />} />
 					<Route path="/mentor/interview/:meetingID" element={<MentorMeetingPage />} />
+					<Route path="/mentor/webinars" element={<Webinars webinar={true}  />} />
 				</Route>
 
 				<Route path="*" element={<NotFound404 />} />

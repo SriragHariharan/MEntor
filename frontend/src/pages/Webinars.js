@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import AddWebinarModal from '../components/webinars/AddWebinarModal';
 
-function Webinars() {
+function Webinars({ webinar }) {
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleToggleModal = () => {
@@ -58,15 +58,20 @@ function Webinars() {
                     </button>
 
                     {/* show button if only mentor */}
-                    <button onClick={handleToggleModal} class="p-2 ms-2 text-xl font-medium text-white bg-green-700 rounded-lg border border-green-700 hover:bg-green-80 dark:bg-green-600 dark:hover:bg-green-700">
-                        <IoMdAdd/>
-                    </button>
+                    {
+                        webinar && (
+                            <button onClick={handleToggleModal} class="p-2 ms-2 text-xl font-medium text-white bg-green-700 rounded-lg border border-green-700 hover:bg-green-80 dark:bg-green-600 dark:hover:bg-green-700">
+                                <IoMdAdd/>
+                            </button>
+                        )
+                    }
                 </div>
             </div>
             <WebinarCard />
         </div>
 
         {/* modal to add webinar */}
+
         {isModalOpen && <AddWebinarModal handleToggleModal={handleToggleModal} /> }
 
     </div>

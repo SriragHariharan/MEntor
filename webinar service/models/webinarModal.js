@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const interviewModalSchema = new mongoose.Schema({
+const webinarModalSchema = new mongoose.Schema({
     topic: { 
         type: String, 
         required: true 
@@ -34,9 +34,13 @@ const interviewModalSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
+    link: { 
+        type: String, 
+        required: true 
+    },
     participants: []
 }, { timestamps: true });
 
-const InterviewModal = mongoose.model('InterviewModal', interviewModalSchema);
+const WebinarModal = mongoose.model('Webinar', webinarModalSchema);
 
-module.exports = InterviewModal;
+module.exports = WebinarModal;
