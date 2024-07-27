@@ -39,6 +39,7 @@ import Followers from "../pages/Followers";
 import MenteeMeetingPage from "../pages/MenteeMeetingPage";
 import MentorMeetingPage from "../pages/MentorMeetingPage";
 import Webinars from "../pages/Webinars";
+import WebinarDetails from "../pages/WebinarDetails";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -91,7 +92,8 @@ function useRoutes() {
 					<Route path="/mentee/interviews" element={<InterviewsPage />} />
 					<Route path="/mentee/chats" element={<Chats />} />
 					<Route path="/mentee/interview/:meetingID" element={<MenteeMeetingPage />} />
-					<Route path="/mentee/webinars" element={<Webinars webinar={false} />} />
+					<Route path="/mentee/webinars" element={<Webinars mentor={false} />} />
+					<Route path="/mentee/webinar/:id" element={<WebinarDetails mentor={false} />} />
 				</Route>
                 
 				{/* mentor routes */}
@@ -103,7 +105,8 @@ function useRoutes() {
 					<Route path="/mentor/chats" element={<Chats />} />
 					<Route path="/mentor/mentees" element={<Followers />} />
 					<Route path="/mentor/interview/:meetingID" element={<MentorMeetingPage />} />
-					<Route path="/mentor/webinars" element={<Webinars webinar={true}  />} />
+					<Route path="/mentor/webinars" element={<Webinars mentor={true}  />} />
+					<Route path="/mentor/webinar/:id" element={<WebinarDetails mentor={true} />} />
 				</Route>
 
 				<Route path="*" element={<NotFound404 />} />

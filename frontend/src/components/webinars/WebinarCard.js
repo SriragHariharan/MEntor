@@ -1,10 +1,11 @@
 import React from 'react'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
  
- function WebinarCard({ details }) {
+ function WebinarCard({ mentor, details }) {
 
     return (
-	    <div className="relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-xs md:max-w-3xl mx-auto bg-white dark:bg-gray-600 my-4">
+	    <Link to={mentor ? `/mentor/webinar/${details?._id}` : `/mentee/webinar/${details?._id}` } className="relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-xs md:max-w-3xl mx-auto bg-white dark:bg-gray-600 my-4">
             <div className="w-full md:w-1/3 grid place-items-center">
                 <img src="https://c4.wallpaperflare.com/wallpaper/240/140/931/docker-animals-happy-whale-turtle-hd-wallpaper-preview.jpg" alt="tailwind logo" className="rounded-xl" />
             </div>
@@ -32,7 +33,7 @@ import moment from 'moment'
 					}
 				</div>
 			</div>
-		</div>
+		</Link>
     )
 }
 

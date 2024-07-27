@@ -78,9 +78,20 @@ const getAllWebinarsController = async(req, res, next) => {
     }
 };
 
+//get details of a webinar
+const getWebinarDetailsController = async(req, res, next) => {
+    try {
+        const details = await Webinar.findOne({_id:req.params.webinarID});
+        return res.status(200).json({success: true, message:null, data:{details}})
+    } catch (error) {
+        next(error.message);
+    }
+}
+
 
 module.exports = {
     createProfile,
     addNewWebinarController,
     getAllWebinarsController,
+    getWebinarDetailsController,
 }

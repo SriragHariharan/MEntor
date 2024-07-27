@@ -6,7 +6,7 @@ import AddWebinarModal from '../components/webinars/AddWebinarModal';
 import { axiosInstance } from '../helpers/axios';
 import { showErrorToast } from '../helpers/ToastMessageHelpers';
 
-function Webinars({ webinar }) {
+function Webinars({ mentor }) {
     const [selectedOption, setSelectedOption] = useState("all");
     const[searchQuery, setSearchQuery] = useState("");
 
@@ -82,7 +82,7 @@ function Webinars({ webinar }) {
 
                     {/* show button if only mentor */}
                     {
-                        webinar && (
+                        mentor && (
                             <button onClick={handleToggleModal} class="p-2 ms-2 text-xl font-medium text-white bg-green-700 rounded-lg border border-green-700 hover:bg-green-80 dark:bg-green-600 dark:hover:bg-green-700">
                                 <IoMdAdd/>
                             </button>
@@ -91,7 +91,7 @@ function Webinars({ webinar }) {
                 </div>
             </div>
             {
-                webinars?.map(webinar => <WebinarCard details={webinar} /> )
+                webinars?.map(webinar => <WebinarCard mentor={mentor} details={webinar} /> )
             }
             {
                 webinars.length === 0 && <div className="text-center text-gray-400 text-5xl py-36">No webinars found</div>
