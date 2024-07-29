@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
     return (
 	    <Link to={mentor ? `/mentor/webinar/${details?._id}` : `/mentee/webinar/${details?._id}` } className="relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 max-w-xs md:max-w-3xl mx-auto bg-white dark:bg-gray-600 my-4">
             <div className="w-full md:w-1/3 grid place-items-center">
-                <img src="https://c4.wallpaperflare.com/wallpaper/240/140/931/docker-animals-happy-whale-turtle-hd-wallpaper-preview.jpg" alt="tailwind logo" className="rounded-xl" />
+                <img src={details?.banner} alt="banner-webinar" className="rounded-xl" />
             </div>
 			<div className="w-full md:w-2/3 bg-white dark:bg-gray-600 flex flex-col space-y-2 p-3">
 				<div className="flex justify-between item-center">

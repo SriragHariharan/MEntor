@@ -33,9 +33,11 @@ function WebinarDetailsSection({ mentor, details, registered, setIsRegistered })
             </div>
             <div className='flex justify-between gap-2'>
                 <div className="bg-green-50 dark:bg-gray-600 dark:text-slate-300 rounded-3xl px-4 py-1.5">
-                    {details?.participants?.length} participants</div>
+                    {details?.participants?.length} participants
+				</div>
                 <div className="bg-green-50 dark:bg-gray-600 dark:text-slate-300 rounded-3xl px-4 py-1.5">
-                  {moment(details?.date).format('MMMM Do, YYYY ◾ h:mm A')}</div>
+                  	{moment(details?.date).format('MMMM Do, YYYY ◾ h:mm A')}
+				</div>
             </div>
           </div>
 		  {
