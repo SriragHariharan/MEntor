@@ -1,8 +1,11 @@
 import React from 'react'
- import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { axiosInstance } from '../../helpers/axios';
+import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
+import { useNavigate } from 'react-router-dom';
  
  function AddWebinarModal({ handleToggleModal }) {
+     const navigate = useNavigate();
     const { register, handleSubmit, errors } = useForm();
     const closeModal = () => {
         handleToggleModal(false);
@@ -23,8 +26,13 @@ import { axiosInstance } from '../../helpers/axios';
                 'Content-Type': 'multipart/form-data',
             }
         })
-        .then(resp => console.log(resp?.data))
-        .catch(err => console.log(err?.response?.data?.message))
+        .then(resp => {
+            const webinarID  = resp.data?.data?.webinarID
+            closeModal();
+            navigate("/mentor/webinar/" + webinarID);
+            showSuccessToast("Webinar added successfully");
+        })
+        .catch(err => showErrorToast(err?.response?.data?.message))
     }
 
 

@@ -6,12 +6,14 @@ function useWebinarDetalis() {
     const [webinarDetails, setWebinarDetails] = useState(null);
     const [mentorDetails, setMentorDetails] = useState(null);
     const [error, setError] = useState(null);
+    const [isRegistered, setIsRegistered] = useState(true);
     const { id } = useParams();
 
     useEffect(() =>{
         axiosInstance.get(process.env.REACT_APP_WEBINAR_SVC_ENDPOINT + `/webinar/${id}/details`)
         .then(resp => {
-            setWebinarDetails(resp.data?.data?.details)
+            setWebinarDetails(resp.data?.data?.details);
+            setIsRegistered(resp.data?.data?.registered)
             return resp.data?.data?.details?.mentorID
         })
         .then(mentorID => {
@@ -23,7 +25,7 @@ function useWebinarDetalis() {
     },[])
 
 
-    return {webinarDetails, mentorDetails, error};
+    return {webinarDetails, isRegistered, mentorDetails, error};
 }
 
 export default useWebinarDetalis

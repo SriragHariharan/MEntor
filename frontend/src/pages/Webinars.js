@@ -11,6 +11,7 @@ function Webinars({ mentor }) {
     const[searchQuery, setSearchQuery] = useState("");
 
     const [webinars, setWebinars] = useState([]);
+    console.log(webinars, "webinars`")
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleToggleModal = () => {
@@ -35,36 +36,40 @@ function Webinars({ mentor }) {
         <div className="md:px-36 py-4 dark:bg-gray-800 px-4">
             <div className="flex justify-between">
                 {/* dropdown */}
-                <div class="w-[150px] text-gray-900 dark:text-gray-100">
-                    <div class="relative w-full group">
-                        {/* <label class="text-xs text-gray-400">Select Category</label> */}
-                        <button class="py-2.5 px-3 w-full md:text-sm text-site      bg-transparent border border-dimmed  focus:border-brand     focus:outline-none focus:ring-0 peer flex items-center justify-between rounded font-semibold text-gray-500">
-                            Select
-                        </button>
-                        <div class="absolute z-[99] top-[100%] left-[50%] translate-x-[-50%] rounded-md overflow-hidden shadow-lg min-w-[200px] w-max peer-focus:visible peer-focus:opacity-100 opacity-0 invisible duration-200 p-1 bg-gray-100 dark:bg-gray-800  border border-dimmed text-xs md:text-sm">
-                            <div onClick={() => setSelectedOption("all")}
-                                class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
-                                All (9)
-                            </div>
-                            <div onClick={() => setSelectedOption("free")}
-                                class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
-                                Free
-                            </div>
-                            <div onClick={() => setSelectedOption("paid")}
-                                class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
-                                Paid
-                            </div>
-                            <div onClick={() => setSelectedOption("today")}
-                                class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
-                                Today's webinars
-                            </div>
-                            <div
-                                class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
-                                My webinars
+                {
+                    !mentor && (
+                        <div class="w-[150px] text-gray-900 dark:text-gray-100">
+                            <div class="relative w-full group">
+                                {/* <label class="text-xs text-gray-400">Select Category</label> */}
+                                <button class="py-2.5 px-3 w-full md:text-sm text-site      bg-transparent border border-dimmed  focus:border-brand     focus:outline-none focus:ring-0 peer flex items-center justify-between rounded font-semibold text-gray-500">
+                                    Select
+                                </button>
+                                <div class="absolute z-[99] top-[100%] left-[50%] translate-x-[-50%] rounded-md overflow-hidden shadow-lg min-w-[200px] w-max peer-focus:visible peer-focus:opacity-100 opacity-0 invisible duration-200 p-1 bg-gray-100 dark:bg-gray-800  border border-dimmed text-xs md:text-sm">
+                                    <div onClick={() => setSelectedOption("all")}
+                                        class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
+                                        All (9)
+                                    </div>
+                                    <div onClick={() => setSelectedOption("free")}
+                                        class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
+                                        Free
+                                    </div>
+                                    <div onClick={() => setSelectedOption("paid")}
+                                        class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
+                                        Paid
+                                    </div>
+                                    <div onClick={() => setSelectedOption("today")}
+                                        class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
+                                        Today's webinars
+                                    </div>
+                                    <div onClick={() => setSelectedOption("mine")}
+                                        class=" w-full block cursor-pointer hover:bg-white dark:hover:bg-gray-900 dark:bg-gray-800 hover:text-link px-3 py-2 rounded-md">
+                                        My webinars
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    )
+                }
                 {/* search bar */}
                 <div class="flex items-center max-w-sm">   
                     <label for="simple-search" class="sr-only">Search</label>
