@@ -40,6 +40,8 @@ import MenteeMeetingPage from "../pages/MenteeMeetingPage";
 import MentorMeetingPage from "../pages/MentorMeetingPage";
 import Webinars from "../pages/Webinars";
 import WebinarDetails from "../pages/WebinarDetails";
+import Rooms from "../pages/Rooms";
+import ActiveRoom from "../pages/ActiveRoom";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -94,6 +96,8 @@ function useRoutes() {
 					<Route path="/mentee/interview/:meetingID" element={<MenteeMeetingPage />} />
 					<Route path="/mentee/webinars" element={<Webinars mentor={false} />} />
 					<Route path="/mentee/webinar/:id" element={<WebinarDetails mentor={false} />} />
+					<Route path="/mentee/rooms" element={<Rooms />} />
+					<Route path="/mentee/room/:id" element={<ActiveRoom />} />
 				</Route>
                 
 				{/* mentor routes */}
@@ -107,6 +111,8 @@ function useRoutes() {
 					<Route path="/mentor/interview/:meetingID" element={<MentorMeetingPage />} />
 					<Route path="/mentor/webinars" element={<Webinars mentor={true}  />} />
 					<Route path="/mentor/webinar/:id" element={<WebinarDetails mentor={true} />} />
+					<Route path="/mentor/rooms" element={<Rooms />} />
+					<Route path="/mentor/room/:id" element={<ActiveRoom />} />
 				</Route>
 
 				<Route path="*" element={<NotFound404 />} />
