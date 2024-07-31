@@ -20,7 +20,9 @@ app.use(cors({
 
 //routes
 const webinarRouter = require("./routes/webinarRoutes")
+const audioRouter = require("./routes/audioRoutes");
 app.use("/api/v1/", webinarRouter);
+app.use("/api/v1/audio", audioRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

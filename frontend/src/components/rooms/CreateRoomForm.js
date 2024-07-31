@@ -1,13 +1,21 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { axiosInstance } from '../../helpers/axios';
+import { useNavigate } from 'react-router-dom';
+import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
 
 
 function CreateRoomForm() {
-
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = async (data) => {
         // Submit the form data to your API or perform any other action
-        console.log(data);
+        axiosInstance.post(process.env.REACT_APP_AUDIO_SVC_ENDPOINT + "/rooms/add", { data })
+        .then(resp => {
+            navigate("/mentee/room/" + resp.data.data.link);
+            showSuccessToast(resp.data.message);
+        })
+        .catch(err => showErrorToast("Unable to create room"))
     };
 
   return (
