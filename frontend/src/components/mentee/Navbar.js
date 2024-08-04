@@ -49,10 +49,10 @@ function Navbar() {
 							<MdDashboardCustomize className="text-2xl" />
 							<span className="ms-3">Dashboard</span>
 						</div>
-						<div className="flex items-center p-2 text-green-500">
+						{/* <div className="flex items-center p-2 text-green-500">
 							<BsFilePost className="text-2xl" />
 							<span className="ms-3">Feed</span>
-						</div>
+						</div> */}
 						<Link
 							to="/mentee/mentors"
 							className="flex items-center p-2 text-green-500"
@@ -60,10 +60,10 @@ function Navbar() {
 							<FaPeopleGroup className="text-2xl" />
 							<span className="ms-3">Mentors</span>
 						</Link>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentee/webinars"} className="flex items-center p-2 text-green-500">
 							<FaLaptopCode className="text-2xl" />
 							<span className="ms-3">Webinars</span>
-						</div>
+						</Link>
 						<Link to={"/mentee/chats"} className="flex items-center p-2 text-green-500">
 							<BsChatSquareText className="text-2xl" />
 							<span className="ms-3">Chats</span>
@@ -89,7 +89,7 @@ function Navbar() {
 							<MdWork className="text-2xl" />
 							<span className="ms-3">Interviews</span>
 						</Link>
-						<Link
+						{/* <Link
 							to="/mentee/notifications"
 							className="flex items-center p-2 text-green-500"
 						>
@@ -98,7 +98,7 @@ function Navbar() {
 							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
 								3
 							</span>
-						</Link>
+						</Link> */}
 					</div>
 					
 					<div className="flex items-center gap-4">

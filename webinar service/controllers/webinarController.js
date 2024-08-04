@@ -77,7 +77,7 @@ const getAllWebinarsController = async(req, res, next) => {
                 break;
             case "mine":
                 let myWebinars = await User.findOne({userID: req.user?.userID}, {webinars:1, _id:0});
-                webinars = await Promise.all(myWebinars?.webinars?.map(async wID => await Webinar.findOne({_id:wID}))).sort({date: -1});   
+                webinars = await Promise.all(myWebinars?.webinars?.map(async wID => await Webinar.findOne({_id:wID})))   
                 break;           
             default:
                 webinars = await Webinar.find({date: {$gt: todaysDate}}).sort({date: -1});
@@ -106,9 +106,9 @@ const registerWebinarController = async(req, res, next) => {
     try {
         await Webinar.updateOne({_id:req.params.webinarID}, {$push: {participants: req.user?.userID}});
         await User.updateOne({userID: req.user?.userID}, {$push:{webinars: req.params.webinarID}});
-        //console.log(response)
+        return res.status(200).json({success: true, message:null, data:null});
     } catch (error) {
-        console.log(error.message);
+        next(error.message);
     }
 }
 
