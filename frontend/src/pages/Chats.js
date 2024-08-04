@@ -5,6 +5,8 @@ import ChatUserHeader from '../components/chats/ChatUserHeader'
 import MyMessage from '../components/chats/MyMessage'
 import OtherMessage from '../components/chats/OtherMessage'
 import { axiosInstance } from '../helpers/axios'
+import conversation from '../assets/images/Conversation-pana.png'
+
 
 import io from 'socket.io-client';
 const socket = io('http://localhost:6006');
@@ -88,6 +90,8 @@ function Chats() {
         socket.emit('sendMessage', { roomId:chatID, message: messageInput, senderID:userID });
     }
 
+    console.log(messages, "messages")
+
   return (
         <div class="container mx-auto">
             <div class="h-screen-85 lg:h-screen-95 flex lg:py-12">
@@ -132,9 +136,10 @@ function Chats() {
                             )
                         }
                         {
-                            (messages?.length === 0) && (
-                                <div class="py-2 px-3 text-center text-4xl text-blue-400">
-                                    <h1>No Conversations yet...</h1>
+                            (messages?.length === 0 || !messages) && (
+                                <div class="py-2 px-3 text-center flex flex-col h-full justify-center items-center text-4xl text-blue-400">
+                                    <img src={conversation} alt="no conversations png" className='opacity-80 w-96' />
+                                    <div className='text-slate-400 text-2xl'>Start or select a conversation now...</div>
                                 </div>
                             ) 
                         }

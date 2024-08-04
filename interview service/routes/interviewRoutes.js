@@ -22,7 +22,6 @@ router.post("/slot/add/single", authMiddleware, addNewSlotController);
 //add new recurring slot
 router.post("/slot/add/reccuring", authMiddleware, addReccuringSlotsController);
 
-
 //delete slot
 router.delete("/slot/:slotID/delete", authMiddleware, deleteAspecificSlotController);
 
