@@ -6,6 +6,9 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 //cors
 app.use(cors({
   origin: 'http://localhost:3000',

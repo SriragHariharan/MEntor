@@ -1,15 +1,31 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { axiosInstance } from '../../helpers/axios';
+import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
 
-function BankACForm({ setShowModal }) {
+function BankACForm({ setShowModal, details }) {
     const closeModal = () => setShowModal(false);
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, errors } = useForm({
+    defaultValues: {
+        accountNumber: details?.accountNumber,
+        accountName: details?.accountHolderName,
+        ifsc: details?.ifscCode,
+        bank: details?.bank,
+        branch:details?.branchName,
+        gpay: details?.googlePayNumber,
+    },
+  });
 
     const onSubmit = async (data) => {
-        console.log(data);
+        axiosInstance.post(process.env.REACT_APP_PAYMENT_SVC_ENDPOINT + '/account/add', data)
+        .then(resp => {
+            showSuccessToast(resp.data?.message || "Account added successfully");
+            closeModal();
+        })
+        .catch(err => showErrorToast(err?.response?.data?.message || "Unable to add account"));
     };
 
-  return (
+    return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg relative md:w-1/3 w-full">
                 <div className="flex justify-between items-center mb-4">
@@ -67,9 +83,9 @@ function BankACForm({ setShowModal }) {
                             type="text"
                             placeholder='Enter Bank Name' 
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            {...register('type', { required: true,})}
+                            {...register('bank', { required: true,})}
                         />
-                        {errors?.type?.type=="required" && <small className="text-red-500">Please enter a valid type</small>}
+                        {errors?.bank?.type=="required" && <small className="text-red-500">Please enter a valid bank</small>}
                     </div>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">       
