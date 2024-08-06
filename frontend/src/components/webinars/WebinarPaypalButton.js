@@ -4,13 +4,19 @@ import { axiosInstance } from '../../helpers/axios';
 import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelpers';
 import { useNavigate } from 'react-router-dom';
 
-function WebinarPaypalButton({ amount, webinarID, setIsRegistered }) {
+function WebinarPaypalButton({ amount, webinarID, mentorID, title }) {
 
-    //register for webinar
+    //register for webinar    
     const handleRegisterWebinar = () => {
         axiosInstance.post(process.env.REACT_APP_WEBINAR_SVC_ENDPOINT + `/webinar/${webinarID}/register`)
         .catch(error => showErrorToast(error.response?.data?.message));
     }
+
+    const handleAddTransaction = (order) => {
+        console.log("Am called now.....!")
+        axiosInstance.post(process.env.REACT_APP_PAYMENT_SVC_ENDPOINT + "/transaction/add", { eventID: webinarID, amount, transactionID:order?.id, mentorID, title, category: "webinar" })
+    }
+
     const navigate = useNavigate();
 
   return (
@@ -40,7 +46,8 @@ function WebinarPaypalButton({ amount, webinarID, setIsRegistered }) {
                 window.close(); //close paypal modal
                 const order = await actions.order.capture(); 
                 showSuccessToast("Registered webinar successfully")
-                handleRegisterWebinar()
+                handleRegisterWebinar();
+                handleAddTransaction(order);
                 //redirect to interviews page
                 navigate("/mentee/webinars")
             }}

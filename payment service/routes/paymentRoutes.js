@@ -1,5 +1,6 @@
 const authMiddleware = require('../authMiddleware');
 const { createBankAccount, getBankAccount } = require('../controllers/AccountControllers');
+const { addTransactionController, getSpecificMentorTransactionsController } = require('../controllers/TransactionControllers');
 
 const router = require('express').Router();
 
@@ -9,7 +10,13 @@ router.post("/account/add", authMiddleware, createBankAccount);
 //get a bank account
 router.get("/account", authMiddleware, getBankAccount);
 
-//update a bank account
-router.put("/account/update", authMiddleware)
+
+//WEBINAR ROUTES
+
+//add participants to webinar
+router.post("/transaction/add", authMiddleware, addTransactionController);
+
+//get all transactions of a mentor
+router.get("/transactions", authMiddleware, getSpecificMentorTransactionsController );
 
 module.exports = router;

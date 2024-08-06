@@ -15,10 +15,13 @@ function MentorInterviewsTable({ interview }) {
         setIsModalOpen(!isModalOpen);
     };
 
+    console.log(interview, "interviews");
+
     const onSubmit = (data) => {
         console.log(data);
         axiosInstance.post(process.env.REACT_APP_INTERVIEW_SVC_ENDPOINT + "/meetings/feedback", { interviewID: interview?._id, ...data } )
         .then(resp => {
+            // store in database
             showSuccessToast(resp.data.message)
             setIsModalOpen(false);
         })
@@ -29,6 +32,7 @@ function MentorInterviewsTable({ interview }) {
         alert("Are you sure you want to mark as completed?");
         axiosInstance.post(process.env.REACT_APP_INTERVIEW_SVC_ENDPOINT + "/meetings/complete", { interviewID: interview?._id  } )
         .then(resp => {
+            //set transaction as completed
             showSuccessToast(resp.data.message)
             setInterviewStatus("completed");
         })

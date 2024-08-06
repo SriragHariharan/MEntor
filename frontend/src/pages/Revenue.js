@@ -1,17 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BankACForm from '../components/revenue/BankACForm';
 import RevenueTable from '../components/revenue/RevenueTable';
 import useAccountDetails from '../hooks/useAccountDetails';
+import useTransactions from '../hooks/useTransactions';
 
 function Revenue() {
+    const transactions = useTransactions();
     const [showModal, setShowModal] = useState(false);
+    const [totalRevenue, setTotalRevenue] = useState(0);
+
+    const [filteredTransaction, setFilteredTransaction] = useState(transactions);
 
     const toggleAccountModal = () => {
         setShowModal(!showModal);
     }
 
     const {account, error} = useAccountDetails(showModal);
-    console.log(account, "account");
+    
+    useEffect(() => {
+        setFilteredTransaction(transactions);
+        let amount = transactions.filter(t => t?.status==="transfered").reduce((accu, curr) => {return accu = accu + curr?.amount}, 0);
+        setTotalRevenue(amount);
+    },[transactions])
 
   return (
     <div className='pt-8 px-2 dark:bg-gray-800'>
@@ -23,7 +33,7 @@ function Revenue() {
                     </div>
                 ):(
                     <div className="bg-green-200 px-4 py-4 rounded-xl text-gray-500">
-                        Total revenue generated: <span className="text-xl font-extrabold text-black">$197</span> 
+                        Total revenue generated: <span className="text-xl font-extrabold text-black">${totalRevenue}</span> 
                     </div>
                 ) 
             }
@@ -39,7 +49,7 @@ function Revenue() {
             showModal && <BankACForm setShowModal={setShowModal} details={account} />
         }
         <div className='my-8'>
-            <RevenueTable />
+            <RevenueTable transactions={transactions} filteredTransaction={filteredTransaction} setFilteredTransaction={setFilteredTransaction} />
         </div>
     </div>
   )
