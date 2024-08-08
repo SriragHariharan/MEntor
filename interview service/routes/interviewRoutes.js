@@ -1,4 +1,6 @@
+const adminAuthMiddleware = require('../adminAuthMiddleware');
 const authMiddleware = require('../authMiddleware');
+const { getMeetingsCountController } = require('../controllers/adminControllers');
 const { 
     addNewSlotController, 
     getSlotsByDateController, 
@@ -52,6 +54,9 @@ router.post("/meetings/feedback", authMiddleware, addInterviewFeedbackController
 //get feedback for the completed meetings
 router.get("/meetings/:interviewID/feedback", authMiddleware, getInterviewFeedbackController);
 
-getInterviewFeedbackController
+//MENTOR ROUTES
+
+//get interviews count for admin homepage
+router.get("/admin/interviews/count", adminAuthMiddleware, getMeetingsCountController)
 
 module.exports = router;

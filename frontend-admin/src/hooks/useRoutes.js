@@ -13,6 +13,7 @@ import Mentees from '../pages/Mentees';
 import Transactions from '../components/Transactions';
 import Approvals from '../pages/Approvals';
 import { SignupContext } from '../contexts/userContext';
+import Dashboard from '../pages/Dashboard';
 
 
 function useRoutes() {
@@ -24,6 +25,7 @@ function useRoutes() {
             <>
                 <Route path="/" element={<RootLayout/>}>
                     <Route path="/" element={<ProtectedRoutes adminAuthenticated={isSignedUp} />}>
+                        <Route index element={ <Dashboard /> } />                    
                         <Route path="/mentors" element={ <Mentors /> } />                    
                         <Route path="/mentees" element={ <Mentees /> } />
                         <Route path="/transactions/" element={ <Transactions /> } />

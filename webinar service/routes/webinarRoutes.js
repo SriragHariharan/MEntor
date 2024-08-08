@@ -1,4 +1,6 @@
+const adminAuthMiddleware = require('../adminAuthMiddleware');
 const authMiddleware = require('../authMiddleware');
+const { getWebinarsController } = require('../controllers/adminControllers');
 const { 
     addNewWebinarController, 
     getAllWebinarsController, 
@@ -19,5 +21,11 @@ router.get("/webinar/:webinarID/details", authMiddleware, getWebinarDetailsContr
 
 //get details of a webinar
 router.post("/webinar/:webinarID/register", authMiddleware, registerWebinarController);
+
+
+//ADMIN ROUTES
+
+//get todays webinars
+router.get("/admin/webinars/today", adminAuthMiddleware, getWebinarsController)
 
 module.exports = router;
