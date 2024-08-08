@@ -89,7 +89,7 @@ function WebinarDetailsSection({ mentor, details, registered, setIsRegistered })
 						</div>
 						<div>
 							<div className="text-xl text-center mb-4 text-gray">Pay ${details?.amount} now</div>
-							<WebinarPaypalButton amount={details?.amount} webinarID={details?._id} setIsRegistered={setIsRegistered} />
+							<WebinarPaypalButton title={details?.title} mentorID={details?.mentorID} amount={details?.amount} webinarID={details?._id} setIsRegistered={setIsRegistered} />
 						</div>
 					</div>
 				</div>

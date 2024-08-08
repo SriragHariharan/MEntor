@@ -3,26 +3,21 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const mongoose = require("mongoose");
-const fileUpload = require('express-fileupload');
+
 const app = express();
-require("./kafka/consumer")
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.json());
-app.use(fileUpload());
 
 //cors
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', "http://localhost:3001"],
   credentials: true
 }));
 
 //routes
-const webinarRouter = require("./routes/webinarRoutes")
-const audioRouter = require("./routes/audioRoutes");
-app.use("/api/v1/", webinarRouter);
-app.use("/api/v1/audio", audioRouter);
+const paymentRoutes = require("./routes/paymentRoutes");
+app.use("/api/v1/", paymentRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

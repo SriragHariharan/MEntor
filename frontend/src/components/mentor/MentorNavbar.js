@@ -116,10 +116,10 @@ function MentorNavbar() {
 							<FaCheckToSlot className="text-2xl" />
 							<span className="ms-3">Slots</span>
 						</Link>
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/revenue"} className="flex items-center p-2 text-green-500">
 							<TbPigMoney className="text-2xl" />
 							<span className="ms-3">Revenue</span>
-						</div>
+						</Link>
 						{/* <Link to={"/mentor/notifications/"} className="flex items-center p-2 text-green-500">
 							<AiOutlineBell className="text-2xl" />
 							<span className="ms-3">Notifications</span>

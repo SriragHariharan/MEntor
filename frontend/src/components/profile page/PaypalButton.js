@@ -25,64 +25,70 @@ function PaypalButton({ product }) {
         axiosInstance.post(process.env.REACT_APP_INTERVIEW_SVC_ENDPOINT + "/meetings/add", {transactionID, ...product})
     }
 
+    //add transaction to db
+    const handleAddTransaction = (transactionID) => {
+        console.log("Am called now.....!")
+        axiosInstance.post(process.env.REACT_APP_PAYMENT_SVC_ENDPOINT + "/transaction/add", { eventID: slotID, title:`Meeting on ${date.split("T")[0]} @ ${time}`, category:"meeting", mentorID, amount, transactionID })
+    }
 
-  return (
-    <div>
-        <PayPalButtons
-            style={{
-                color: "gold",
-                layout: "horizontal",
-                height: 48,
-                tagline: false,
-                shape: "pill"
-            }}
-            onClick={async(data, actions) => {
-                console.log("Am clicked...");
-                // check whether slot is already booked
-                let slotStatus = await checkSlotStatus();
-                console.log("slot status:", slotStatus);
-                if (slotStatus) {
-                    window.close(); //close paypal modal
-                    showErrorToast("Slot unavailable")
-                    return actions.reject();
-                } else {
-                    return actions.resolve();
-                }
-            }}
-            createOrder={(data, actions) => {
-                return actions.order.create({
-                    purchase_units: [
-                    {
-                        description: `slotID: ${slotID} && time: ${time} && date: ${date}`,
-                        amount: {
-                            value: amount
-                        }
+    return (
+        <div>
+            <PayPalButtons
+                style={{
+                    color: "gold",
+                    layout: "horizontal",
+                    height: 48,
+                    tagline: false,
+                    shape: "pill"
+                }}
+                onClick={async(data, actions) => {
+                    console.log("Am clicked...");
+                    // check whether slot is already booked
+                    let slotStatus = await checkSlotStatus();
+                    console.log("slot status:", slotStatus);
+                    if (slotStatus) {
+                        window.close(); //close paypal modal
+                        showErrorToast("Slot unavailable")
+                        return actions.reject();
+                    } else {
+                        return actions.resolve();
                     }
-                    ]
-                });
-            }}
+                }}
+                createOrder={(data, actions) => {
+                    return actions.order.create({
+                        purchase_units: [
+                        {
+                            description: `slotID: ${slotID} && time: ${time} && date: ${date}`,
+                            amount: {
+                                value: amount
+                            }
+                        }
+                        ]
+                    });
+                }}
 
-            onApprove={async (data, actions) => {
-                window.close(); //close paypal modal
-                const order = await actions.order.capture(); 
-                showSuccessToast("Slot booked successfully")
-                handleBookSlot(order?.id)
-                //redirect to interviews page
-                navigate("/mentee/interviews")
-            }}
+                onApprove={async (data, actions) => {
+                    const order = await actions.order.capture(); 
+                    handleBookSlot(order?.id);
+                    handleAddTransaction(order?.id);
+                    window.close(); //close paypal modal
+                    showSuccessToast("Slot booked successfully")
+                    //redirect to interviews page
+                    navigate("/mentee/interviews")
+                }}
 
-            onCancel={() => {
-              // Display cancel message, modal or redirect user to cancel page or back to slots page
-              alert("Order cancelled : (")
-            }}
+                onCancel={() => {
+                // Display cancel message, modal or redirect user to cancel page or back to slots page
+                alert("Order cancelled : (")
+                }}
 
-            onError={(err) => {
-                //setError(err);
-                console.error("PayPal Checkout onError", err);
-            }}
-        />
-    </div>
-  )
+                onError={(err) => {
+                    //setError(err);
+                    console.error("PayPal Checkout onError", err);
+                }}
+            />
+        </div>
+    )
 }
 
 export default PaypalButton
