@@ -26,7 +26,7 @@ function useRoutes() {
                     <Route path="/" element={<ProtectedRoutes adminAuthenticated={isSignedUp} />}>
                         <Route path="/mentors" element={ <Mentors /> } />                    
                         <Route path="/mentees" element={ <Mentees /> } />
-                        <Route path="/transactions" element={ <Transactions /> } />
+                        <Route path="/transactions/" element={ <Transactions /> } />
                         <Route path="/approvals" element={ <Approvals /> } />
                     </Route>
                     <Route path="login" element={!isSignedUp ? <Login /> : <Navigate to={"/"} /> } />

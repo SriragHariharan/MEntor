@@ -27,13 +27,13 @@ function ApprovalsTable({mentors}) {
                         </thead>
                         <tbody>
                             {
-                                mentors.length === 0 && <h1 className="text-center text-gray-300 text-4xl">No mentor to approve</h1>
-                            }
-                            {
                                 mentors?.map(mentor => <ApprovalCard mentor={mentor} />)
                             }
                         </tbody>
                     </table>
+                    {
+                        mentors.length === 0 && <h1 className="text-center text-gray-300 text-4xl my-10">No mentors to approve</h1>
+                    }
                 </div>
                 {
                     mentors.length !== 0 && (

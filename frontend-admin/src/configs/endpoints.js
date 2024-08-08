@@ -2,6 +2,7 @@
 const USER_SERVICE_BASE_URL = "http://localhost:6001/api/v1/"
 const PROFILE_SERVICE_BASE_URL = "http://localhost:6002/api/v1/"
 const INTERVIEW_SERVICE_BASE_URL = "http://localhost:6004/api/v1/"
+const PAYMENT_SERVICE_BASE_URL = "http://localhost:6007/api/v1/"
 
 // Define your endpoints
 const ENDPOINTS = {
@@ -14,7 +15,10 @@ const ENDPOINTS = {
     APPROVE_MENTOR:     USER_SERVICE_BASE_URL + "/admin/mentor/approve",
     BLOCK_MENTOR:       USER_SERVICE_BASE_URL + "/mentor/block",
     BLOCK_MENTEE:       USER_SERVICE_BASE_URL + "/mentee/block",
-//  UPDATE_USER: (userId) => `${BASE_URL}/users/${userId}`,
+    TRANSACTIONS:       PAYMENT_SERVICE_BASE_URL + "/admin/transactions/",
+    BANK_ACCOUNT:       PAYMENT_SERVICE_BASE_URL + "/admin/account/",
+    COMPLETED_TRANSACTION: PAYMENT_SERVICE_BASE_URL +  "/admin/transaction/transfered/"
+//  UPDATE_USER: (userId) => `${BASE_URL}/users/${userId}`
 };
 
 // Export the endpoints
