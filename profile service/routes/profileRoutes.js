@@ -41,7 +41,7 @@ router.delete("/profile/picture/:imageType", authMiddleware, deleteUserPictureCo
 router.get("/users/mentors", authMiddleware, allMentorsController)
 
 //get profile details of a specific user
-router.get("/users/:userID/profile", authMiddleware, getUserDetailsController)
+router.get("/users/:userID/profile", getUserDetailsController)
 
 //follow a mentor
 router.post("/users/follow", authMiddleware, followMentorController)

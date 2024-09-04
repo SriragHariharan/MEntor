@@ -43,6 +43,8 @@ import WebinarDetails from "../pages/WebinarDetails";
 import Rooms from "../pages/Rooms";
 import ActiveRoom from "../pages/ActiveRoom";
 import Revenue from "../pages/Revenue";
+import MentorDashboard from "../pages/MentorDashboard";
+import MenteeDashboard from "../components/mentee/MenteeDashboard";
 
 function useRoutes() {
 	const dispatch = useDispatch();
@@ -89,6 +91,7 @@ function useRoutes() {
 
 				{/* Mentee Protected Routes */}
 				<Route path='/mentee' element={<MenteeProtectedRoutes user={USER?.token} role={USER?.role}  />}>
+					<Route path="/mentee/dashboard" element={<MenteeDashboard />} />
 					<Route path="/mentee/profile" element={<ProfilePage />} />
 					<Route path="/mentee/mentors" element={<Mentors />} />
 					<Route path="/mentee/notifications" element={<Notifications />} />
@@ -103,6 +106,7 @@ function useRoutes() {
                 
 				{/* mentor routes */}
 				<Route path='/mentor' element={<MentorProtectedRoutes user={USER?.token} role={USER?.role}  />}>
+					<Route path="/mentor/dashboard" element={<MentorDashboard />} />
 					<Route path="/mentor/profile" element={<ProfilePage />} />
 					<Route path="/mentor/notifications" element={<Notifications />} />
 					<Route path="/mentor/interviews" element={<InterviewsPage />} />

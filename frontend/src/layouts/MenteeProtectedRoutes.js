@@ -10,7 +10,7 @@ function MenteeProtectedRoutes({user, role}) {
                 (
                     <>
                         <Navbar />
-                        <div class="sm:ml-64">
+                        <div class="sm:ml-64 pt-16">
                             <Outlet />
                         </div>
                     </> 

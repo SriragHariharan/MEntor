@@ -11,13 +11,13 @@ app.use(bodyParser.json());
 
 //cors
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
 //routes
 const interviewRouter = require("./routes/interviewRoutes")
-app.use("/api/v1/", interviewRouter);
+app.use("/api/interview-service/v1/", interviewRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

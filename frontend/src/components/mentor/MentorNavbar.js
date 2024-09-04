@@ -1,14 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../assets/images/landingpage/mentor logo.jpg";
 import { Link } from "react-router-dom"
 
 //react icons
 import { MdDashboardCustomize } from "react-icons/md";
-import { BsFilePost } from "react-icons/bs";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { FaLaptopCode } from "react-icons/fa6";
 import { BsChatSquareText } from "react-icons/bs";
-import { GiPublicSpeaker } from "react-icons/gi";
 import { FaGear } from "react-icons/fa6";
 import { MdWork } from "react-icons/md";
 import { AiOutlineBell } from "react-icons/ai";
@@ -24,6 +21,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAction } from "../../redux toolkit/userSlice";
 import { toggleTheme } from "../../redux toolkit/themeSlice";
 import { DEFAULT_USER_IMG } from "../../helpers/CONSTANTS";
+import { generateToken, messaging } from "../../helpers/firebase";
+import { onMessage } from "firebase/messaging";
+import toast from "react-hot-toast";
+import PushNotification from "../notification/PushNotification";
 
 function MentorNavbar() {
 	const dispatch = useDispatch();
@@ -32,6 +33,20 @@ function MentorNavbar() {
 	}
 	const isDarkTheme = useSelector((store) => store?.isDark?.isThemeDark);
 	const profilePic = useSelector(store => store.profile?.profilePic);
+
+
+	//firebase cloud messaging recieve foreground messages
+	//get notification permission
+	useEffect(() => {
+		generateToken();
+
+		//for foreground messages
+		onMessage(messaging, (payload) => {
+			console.log(payload, "foreground ");
+			//show custom toast message
+			toast.custom((t) => <PushNotification payload={payload} t={t} />)
+		});
+	},[])
 
 	return (
 		<div className="">
@@ -67,9 +82,9 @@ function MentorNavbar() {
 										<MdDarkMode  onClick={() => dispatch(toggleTheme())} className="cursor-pointer w-8 h-8 text-gray-500" />
 									)}									
 									<img
-										className="w-10 h-10 rounded-full cursor-pointer"
+										className="w-10 h-10 rounded-full cursor-pointer object-cover"
 										src={profilePic ?? DEFAULT_USER_IMG}
-										alt="user photo"
+										alt="user"
 									/>
 								</div>
 							</div>
@@ -85,10 +100,10 @@ function MentorNavbar() {
 			>
 				<div className="h-full px-3 py-4 overflow-y-auto no-scrollbar bg-gray-50 dark:bg-gray-800">
 					<div className="space-y-2 font-medium  mt-16">
-						<div className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/dashboard"} className="flex items-center p-2 text-green-500">
 							<MdDashboardCustomize className="text-2xl" />
 							<span className="ms-3">Dashboard</span>
-						</div>
+						</Link>
 						<Link to={"/mentor/mentees/"} className="flex items-center p-2 text-green-500">
 							<PiStudentBold className="text-2xl" />
 							<span className="ms-3">Mentees</span>
@@ -104,10 +119,10 @@ function MentorNavbar() {
 								3
 							</span>
 						</Link>
-						<div className="flex items-center p-2 text-green-500">
+						{/* <div className="flex items-center p-2 text-green-500">
 							<GiPublicSpeaker className="text-2xl" />
 							<span className="ms-3">Rooms</span>
-						</div>
+						</div> */}
 						<Link to={"/mentor/interviews/"} className="flex items-center p-2 text-green-500">
 							<MdWork className="text-2xl" />
 							<span className="ms-3">Meetings</span>
@@ -120,14 +135,14 @@ function MentorNavbar() {
 							<TbPigMoney className="text-2xl" />
 							<span className="ms-3">Revenue</span>
 						</Link>
-						{/* <Link to={"/mentor/notifications/"} className="flex items-center p-2 text-green-500">
+						<Link to={"/mentor/notifications/"} className="flex items-center p-2 text-green-500">
 							<AiOutlineBell className="text-2xl" />
 							<span className="ms-3">Notifications</span>
 							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
 								3
 							</span>
-						</Link> */}
-						<Link to={"/mentee/profile"} className="flex items-center p-2 text-green-500">
+						</Link>
+						<Link to={"/mentor/profile"} className="flex items-center p-2 text-green-500">
 							<FaGear className="text-2xl" />
 							<span className="ms-3">Profile</span>
 						</Link>

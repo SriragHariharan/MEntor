@@ -13,7 +13,9 @@ const {
     getAllMeetingsController,
     interviewMarkAsCompletedController,
     addInterviewFeedbackController,
-    getInterviewFeedbackController
+    getInterviewFeedbackController,
+    getTodaysMeetingsController,
+    getMarksController
 } = require('../controllers/interviewController');
 
 const router = require('express').Router();
@@ -53,6 +55,12 @@ router.post("/meetings/feedback", authMiddleware, addInterviewFeedbackController
 
 //get feedback for the completed meetings
 router.get("/meetings/:interviewID/feedback", authMiddleware, getInterviewFeedbackController);
+
+//get today's meetings
+router.get("/meetings/today", authMiddleware, getTodaysMeetingsController);
+
+//get marks
+router.get("/meetings/marks", authMiddleware, getMarksController);
 
 //MENTOR ROUTES
 

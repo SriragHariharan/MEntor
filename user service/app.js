@@ -12,12 +12,12 @@ app.use(bodyParser.json());
 
 //cors
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
 const AuthRoutes = require("./routes/authRoutes");
-app.use("/api/v1/", AuthRoutes);
+app.use("/api/user-service/v1/", AuthRoutes);
 
 // Error handling middleware
 app.use((err, req, res) => {

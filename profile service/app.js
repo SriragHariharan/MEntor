@@ -17,13 +17,13 @@ app.use(fileUpload({
 
 //cors
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
 //routes
 const profileRouter = require("./routes/profileRoutes")
-app.use("/api/v1/", profileRouter);
+app.use("/api/profile-service/v1/", profileRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -44,7 +44,7 @@ function SlotsPage({profileDetails}) {
 					/>
 				</div>
 				{/* slots listing section */}
-				<div className="mt-12 flex gap-4">
+				<div className="mt-12 grid grid-cols-2 md:grid-cols-6 gap-4">
 					{
 						slots?.map(slot => 
 							slot.isBooked ?

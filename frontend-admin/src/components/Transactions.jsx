@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import useAxios from '../hooks/useAxios';
 import ENDPOINTS from '../configs/endpoints';
 import SingleTransactionCell from './SingleTransactionCell';
@@ -23,13 +24,26 @@ function Transactions() {
         .catch(err => console.log(err))
     },[option])
 
+    //download transactions as pdf
+    const generateAndDownloadPDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(16);
+        doc.setTextColor(0, 128, 0);
+        autoTable(doc, {
+            theme: 'grid',
+            head: [['title', 'Type', 'Amount($)', 'beneficiary', 'participants', 'status']],
+            body: transactions?.map(t => [t?.title, t?.category, t?.participants?.length * t?.amount, t?.mentorID, t?.participants?.length, t?.status ]),
+        });
+        doc.save('transactions.pdf');
+    };
+
 
   return (
     <section class="bg-white px-4 py-8 antialiased dark:bg-gray-900 md:py-16">
         <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
             <div class="mx-auto max-w-full">
             <div class="gap-4 lg:flex lg:items-center lg:justify-between">
-                <form class="flex items-center">
+                {/* <form class="flex items-center">
                     <label for="simple-search" class="sr-only">Search</label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -39,30 +53,38 @@ function Transactions() {
                         </div>
                         <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search" required="" />
                     </div>
-                </form>
+                </form> */}
+
+                {
+                    (transactions?.length !== 0) ? (
+                        <div onClick={generateAndDownloadPDF} className="px-6 py-2 text-center bg-slate-100 rounded-xl cursor-pointer">
+                            Download PDF
+                        </div>
+                    ): (<div></div>)
+                }
 
                 <div class="mt-6 gap-4 space-y-4 sm:flex sm:items-center sm:space-y-0 lg:mt-0 lg:justify-end">
-                {/* <div>
-                    <label for="order-type" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select order type</label>
-                    <select id="order-type" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]">
-                        <option value="all">All</option>
-                        <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div> */}
+                    {/* <span class="inline-block text-gray-500 dark:text-gray-400"> status </span>
+                    <div>
+                        <select id="order-type" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]">
+                            <option value="all">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div> */}
 
-                <span class="inline-block text-gray-500 dark:text-gray-400"> from </span>
+                    <span class="inline-block text-gray-500 dark:text-gray-400"> from </span>
 
-                <div>
-                    <label for="date" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select date</label>
-                    <select onChange={(e) => setOption(e.target.value)} id="date" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]">
-                        <option value="all">All</option>
-                        <option value="today">Today</option>
-                        <option value="week">this week</option>
-                        <option value="month">this month</option>
-                        <option value="year">this year</option>
-                    </select>
-                </div>
+                    <div>
+                        <label for="date" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select date</label>
+                        <select onChange={(e) => setOption(e.target.value)} id="date" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:w-[144px]">
+                            <option value="all">All</option>
+                            <option value="today">Today</option>
+                            <option value="week">this week</option>
+                            <option value="month">this month</option>
+                            <option value="year">this year</option>
+                        </select>
+                    </div>
 
                 {/* <button type="button" class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300   dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:w-auto">Add return request</button> */}
                 </div>

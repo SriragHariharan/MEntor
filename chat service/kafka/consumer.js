@@ -3,7 +3,7 @@ const { createNewChat } = require('../controllers/chatController')
 
 const kafka = new Kafka({
   clientId: 'chat-management-service',
-  brokers: ['localhost:9092'],
+  brokers: ['kafka-service:9092'],
 })
 //new-user-topic
 const consumer = kafka.consumer({ groupId: 'chat-management-service' })

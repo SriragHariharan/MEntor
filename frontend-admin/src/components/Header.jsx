@@ -43,15 +43,15 @@ function Navbar() {
 							</div>
 						</div>
 						<div className="flex items-center">
-							<div className="flex items-center ms-3">
-								<div className="flex items-center gap-4">
-									<img
-										className="w-10 h-10 rounded-full object-cover cursor-pointer"
-										src={""}
-										alt="user photo"
-									/>
+							<div className="text-xl font-semibold">
+								Welcome admin <span className="text-xs">🟢</span> 
+								<div className='text-xs font-extralight italic'>
+									<span className="font-semibold">Login:</span>
+									{new Date().toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })} 
+									{" "}{" "} @ {" "}{" "} 
+									{new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit'})}
 								</div>
-							</div>
+							</div> 
 						</div>
 					</div>
 				</div>
@@ -64,10 +64,10 @@ function Navbar() {
 			>
 				<div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
 					<div className="space-y-2 font-medium  mt-16">
-						<div className="flex items-center p-2 text-green-500">
+						<Link to="/" className="flex items-center p-2 text-green-500">
 							<MdDashboardCustomize className="text-2xl" />
 							<span className="ms-3">Dashboard</span>
-						</div>
+						</Link>
 						<Link to="/mentors" className="flex items-center p-2 text-green-500">
 							<FaPeopleGroup className="text-2xl" />
 							<span className="ms-3">Mentors</span>

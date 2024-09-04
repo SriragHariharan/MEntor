@@ -11,13 +11,13 @@ app.use(bodyParser.json());
 
 //cors
 app.use(cors({
-  origin: ['http://localhost:3000', "http://localhost:3001"],
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 
 //routes
 const paymentRoutes = require("./routes/paymentRoutes");
-app.use("/api/v1/", paymentRoutes);
+app.use("/api/payment-service/v1/", paymentRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -5,6 +5,7 @@ import { IoMdAdd } from "react-icons/io";
 import AddWebinarModal from '../components/webinars/AddWebinarModal';
 import { axiosInstance } from '../helpers/axios';
 import { showErrorToast } from '../helpers/ToastMessageHelpers';
+import { insertDataToIndexedDB, retrieveDataFromIndexdDB } from '../helpers/local-forage';
 
 function Webinars({ mentor }) {
     const [selectedOption, setSelectedOption] = useState("all");
@@ -20,9 +21,18 @@ function Webinars({ mentor }) {
 
     //get webinars
     useEffect(() => {
-        axiosInstance.get(process.env.REACT_APP_WEBINAR_SVC_ENDPOINT + "/webinar/"+ selectedOption)
-        .then(resp => setWebinars(resp.data?.data?.webinars))
-        .catch(err => showErrorToast(err?.response?.data?.message))
+        if(!navigator.onLine){
+            retrieveDataFromIndexdDB("webinars")
+            .then(data => setWebinars(data))
+            .catch(error => showErrorToast("Unable to fetch data"))
+        }else{
+            axiosInstance.get(process.env.REACT_APP_WEBINAR_SVC_ENDPOINT + "/webinar/"+ selectedOption)
+            .then(resp => {
+                setWebinars(resp.data?.data?.webinars);
+                insertDataToIndexedDB("webinars", resp.data?.data?.webinars);
+            })
+            .catch(err => showErrorToast(err?.response?.data?.message))
+        }
     },[selectedOption])
 
     //search for webinar
@@ -99,7 +109,7 @@ function Webinars({ mentor }) {
                 webinars?.map(webinar => <WebinarCard mentor={mentor} details={webinar} /> )
             }
             {
-                webinars.length === 0 && <div className="text-center text-gray-400 text-5xl py-36">No webinars found</div>
+                webinars?.length === 0 && <div className="text-center text-gray-400 text-5xl py-36">No webinars found</div>
             }
             
         </div>

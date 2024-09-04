@@ -13,14 +13,13 @@ app.use(express.json());
 
 //cors
 app.use(cors({
-//   origin: ["http://localhost:3000", "http://127.0.0.1:3000", "http://127.0.0.1:5500/"],
-    origin: '*',
+    origin: process.env.FRONTEND_URL,
     credentials: true
 }));
 
 //routes
 const chatRoutes = require("./routes/ChatRoutes.js")
-app.use("/api/v1/", chatRoutes);
+app.use("/api/chat-service/v1/", chatRoutes);
 
 
 // database connection

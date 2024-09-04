@@ -31,7 +31,6 @@ function Chats() {
     
     //get the list of mentors I am following
     useEffect(() => {
-        console.log("am triggered on rerednder")
         axiosInstance.get(process.env.REACT_APP_PROFILE_SVC_ENDPOINT + "/following")
         .then(resp => setFollowing(resp.data.data.following))
         .catch(err => console.log(err))
@@ -39,7 +38,6 @@ function Chats() {
 
     //get chatS
     useEffect(() => {
-        console.log("am triggered on rerednder")
         axiosInstance.get(process.env.REACT_APP_CHAT_SVC_ENDPOINT + "/chats/"+ selectedChat?.userID)
         .then(resp => {
             //console.log("msg :::",resp.data?.data)
@@ -87,7 +85,7 @@ function Chats() {
 
     const handleSendMessage = () => {
         if(messageInput == "") return;
-        socket.emit('sendMessage', { roomId:chatID, message: messageInput, senderID:userID });
+        socket.emit('sendMessage', { roomId:chatID, message: messageInput, senderID:userID, receiverID: selectedChat?.userID });
     }
 
     console.log(messages, "messages")

@@ -2,7 +2,7 @@ const { Kafka } = require("kafkajs");
 
 const kafka = new Kafka({
 	clientId: "admin-client",
-	brokers: ["localhost:9092"], // Replace with your Kafka broker addresses
+	brokers: ["kafka-service:9092"], // Replace with your Kafka broker addresses
 });
 
 const admin = kafka.admin();
@@ -25,6 +25,11 @@ const createTopic = async () => {
 				},
 				{
 					topic: "create-chat-topic", // The topic name
+					numPartitions: 1, // The number of partitions
+					replicationFactor: 1, // The replication factor
+				},
+				{
+					topic: "notification-topic", // The topic name
 					numPartitions: 1, // The number of partitions
 					replicationFactor: 1, // The replication factor
 				}

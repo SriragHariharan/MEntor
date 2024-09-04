@@ -248,7 +248,33 @@ const getInterviewFeedbackController = async(req, res, next) => {
     }
 }
 
+//mentor get todays meetings
+const getTodaysMeetingsController = async(req, res, next) => {
+    try {
+        //todays webinars
+        let todaysMeetings = [];
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        if(req.user?.role === "mentor"){
+            todaysMeetings = await Interview.find({ mentorID: req.user.userID, date: { $gte: startOfDay, $lt: endOfDay } })
+        }else{
+            todaysMeetings = await Interview.find({ menteeID: req.user.userID, date: { $gte: startOfDay, $lt: endOfDay } })
+        }
+        return res.status(200).json({success:true, message:null, data:{todaysMeetings}});
+    } catch (error) {
+        next(error.message);
+    }
+};
 
+const getMarksController = async(req, res, next) => {
+    try {
+        const marks = await Interview.find({ menteeID: req.user.userID, marks: {$gt: 0} });
+        return res.status(200).json({ success: true, message: null, data:{ marks }})
+    } catch (error) {
+        next(error.message);
+    }
+};
 
 module.exports = {
     createProfile,
@@ -264,5 +290,6 @@ module.exports = {
     interviewMarkAsCompletedController,
     addInterviewFeedbackController,
     getInterviewFeedbackController,
-
+    getTodaysMeetingsController,
+    getMarksController,
 }

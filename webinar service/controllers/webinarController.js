@@ -52,7 +52,14 @@ const getAllWebinarsController = async(req, res, next) => {
     try {
         if(req.user.role === "mentor"){
             let webinars = await Webinar.find({mentorID: req.user.userID}).sort({date: -1});
-            return res.status(200).json({success:true, message:null, data:{webinars}})
+
+            //todays webinars
+            const today = new Date();
+            const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            let todaysWebinars = await Webinar.find({ mentorID: req.user.userID, date: { $gte: startOfDay, $lt: endOfDay } })
+
+            return res.status(200).json({success:true, message:null, data:{webinars, todaysWebinars}})
         }
         const today = new Date();
         const todaysDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());

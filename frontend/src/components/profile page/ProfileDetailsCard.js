@@ -8,6 +8,7 @@ import { showErrorToast, showSuccessToast } from '../../helpers/ToastMessageHelp
 import { useDispatch, useSelector } from 'react-redux';
 import { changeUserDetails, updateCoverPic, updateProfilePic } from '../../redux toolkit/profileSlice';
 import { DEFAULT_COVER_IMG, DEFAULT_USER_IMG } from '../../helpers/CONSTANTS';
+import ProfileQR from './ProfileQR';
 
 function ProfileDetailsCard({profileDetails,followersCount,profilePic, coverPic, editAccess}) {
 	const dispatch = useDispatch();
@@ -22,7 +23,8 @@ function ProfileDetailsCard({profileDetails,followersCount,profilePic, coverPic,
 	};
 
 	//destructuring props
-	const {username, bio, about, jobDescription, githubLink, linkedInLink, skills} = profileDetails;
+	const {username, bio, about, jobDescription, githubLink, linkedInLink, skills, userID} = profileDetails;
+	console.log(profileDetails, "PD");
 
 	const [profileImageLink, setProfileImageLink] = useState(null);
 	const [coverImageLink, setCoverImageLink] = useState(null);
@@ -113,6 +115,10 @@ function ProfileDetailsCard({profileDetails,followersCount,profilePic, coverPic,
 		})
 		.catch(error => showErrorToast(error.message));
 	}
+
+	//toggle qr modal
+	const [qrModalOpen, setQrModalOpen] = useState(false);
+	const toggleQrModal = () => setQrModalOpen(!qrModalOpen);
 
   return (
 		<>
@@ -209,13 +215,17 @@ function ProfileDetailsCard({profileDetails,followersCount,profilePic, coverPic,
 									</button>
 								)
 							}
-							<button class="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
-								More
+							<button onClick={toggleQrModal} class="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
+								Share profile
 							</button>
-							<button class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-300">
-								<RiUserFollowFill className="text-3xl" />
-							</button>
+							{/* <button class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-300">
+								<RiUserFollowFill className="text-lg" />
+							</button> */}
+							
 						</div>
+						{
+							qrModalOpen && <ProfileQR userID={userID} toggleQrModal={toggleQrModal} />
+						}
 					</div>
 				</div>
 			</div>

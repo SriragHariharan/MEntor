@@ -1,5 +1,6 @@
 const { Server } = require('socket.io');
 const Chat = require('../models/chatModel');
+const { publishChatNotificationToNotificationService } = require('../kafka/producer');
 
 const socket = (expressServer) => {
     const io = new Server(expressServer, {
@@ -23,7 +24,7 @@ const socket = (expressServer) => {
         });
 
         socket.on('sendMessage', async(data) => {
-            const { roomId, message, senderID } = data;
+            const { roomId, message, senderID, receiverID } = data;
             console.log("senderID" + senderID);
             let msgObj = { message, senderID };
             //save message to database
@@ -33,7 +34,8 @@ const socket = (expressServer) => {
                 let messageObj = { message, senderID, isRead:false, isDelivered:false, isDeleted:false }
                 io.to(roomId).emit('message', messageObj);
                 console.log(`Sent ${message} to room ${roomId}`);
-                .0
+                //send message notif to notification service
+                publishChatNotificationToNotificationService(receiverID, message);
             }).catch(err => console.log(err));
         });
 

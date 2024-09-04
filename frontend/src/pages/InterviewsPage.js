@@ -180,13 +180,13 @@ function InterviewsPage() {
 					</thead>
 					<tbody>
 						{
-							(role== "mentee" && meetings.length > 0) && sortedMeetings?.map(int => <InterviewsTable interview={int} /> )
+							(role== "mentee" && meetings?.length > 0) && sortedMeetings?.map(int => <InterviewsTable interview={int} /> )
 						}
 						{
-							(role== "mentor" && meetings.length > 0) && sortedMeetings?.map(int => <MentorInterviewsTable interview={int} /> )
+							(role== "mentor" && meetings?.length > 0) && sortedMeetings?.map(int => <MentorInterviewsTable interview={int} /> )
 						}
 						{
-							meetings.length === 0 && <h1 className="text-center text-gray-400">No interviews scheduled yet</h1>
+							meetings?.length === 0 && <h1 className="text-center text-gray-400">No interviews scheduled yet</h1>
 						}
 					</tbody>
 				</table>
